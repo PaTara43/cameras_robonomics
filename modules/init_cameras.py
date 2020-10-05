@@ -31,7 +31,7 @@ class Camera():
         try:
             # TODO: timeout
             self.cap = cv2.VideoCapture('rtsp://'+ self.login + ':' + self.password + '@' + self.ip + ':' + self.port + '/Streaming/Channels/101')
-            logging.warning("Capturin image from  " + self.camera_name)
+            logging.warning("Capturing image from  " + self.camera_name)
             self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -41,45 +41,6 @@ class Camera():
         except Exception as e:
             logging.error("Failed to connect to " + self.camera_name + '. \nError: ' + e)
             self.connected = False
-
-
-    def stream(self):
-
-        try:
-            self.connect()
-            if self.connected:
-                logging.warning("Started streaming image from " + self.camera_name)
-
-                while self.cap.isOpened() and not self.stop_stream:
-                    print(1)
-                    self.ret, self.frame = self.cap.read()
-
-                    if not self.ret:
-                        logging.error("Failed to grab frame from " + self.camera_name + ". Exiting stream")
-                        break
-
-                    cv2.imshow(self.camera_name, self.frame)
-                    print(2)
-                    k = cv2.waitKey(1)
-                    if k%256 == 27: # ESC pressed
-                        logging.warning("Escape hit, exiting stream " + self.camera_name)
-                        break
-            else:
-                logging.error("No connection established with " + self.camera_name + ", no stream available")
-        except Exception as e:
-            logging.error("Error while streaming " + self.camera_name + ". Exiting stream.\nError: ", + e)
-        finally:
-            try:
-                if not self.connected:
-                    pass
-                if self.stop_stream:
-                    logging.warning("Stream of " + self.camera_name + " interrupted by transaction")
-                logging.warning("Releasing connection of " + self.camera_name)
-                self.cap.release()
-                cv2.destroyAllWindows()
-                logging.warning("Connection of " + self.camera_name + " released")
-            except Exception as e:
-                logging.error("Error while releasing " + self.camera_name + ".\nError: ", + e)
 
 
     def record(self):
