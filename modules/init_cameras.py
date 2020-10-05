@@ -31,7 +31,7 @@ class Camera():
         try:
             # TODO: timeout
             self.cap = cv2.VideoCapture('rtsp://'+ self.login + ':' + self.password + '@' + self.ip + ':' + self.port + '/Streaming/Channels/101')
-
+            logging.warning("Capturin image from  " + self.camera_name)
             self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -48,18 +48,18 @@ class Camera():
         try:
             self.connect()
             if self.connected:
-                logging.warning("Started streaming resized image from " + self.camera_name)
+                logging.warning("Started streaming image from " + self.camera_name)
 
                 while self.cap.isOpened() and not self.stop_stream:
+                    print(1)
                     self.ret, self.frame = self.cap.read()
 
                     if not self.ret:
                         logging.error("Failed to grab frame from " + self.camera_name + ". Exiting stream")
                         break
 
-                    self.frameS = cv2.resize(self.frame, (self.width/4, self.height/4))
-                    cv2.imshow(self.camera_name, self.frameS)
-
+                    cv2.imshow(self.camera_name, self.frame)
+                    print(2)
                     k = cv2.waitKey(1)
                     if k%256 == 27: # ESC pressed
                         logging.warning("Escape hit, exiting stream " + self.camera_name)

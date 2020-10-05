@@ -26,6 +26,8 @@ def read_configuration() -> dict:
             logging.error(e)
             exit()
 
+class Error(Exception):
+    pass
 
 def listen_to_robonomics_func(config, cams):
 

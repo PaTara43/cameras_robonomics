@@ -1,9 +1,9 @@
 general:
   output_dir: "" #ends with a "/"
-  num_cams: 3 #must mathc with camerai number
+  num_cams: 3 #must match with camerai number
   mode: 'record' # 'stream' or 'record'
 transaction:
-  path_to_robonomics_file: "" #where lies the binaty file
+  path_to_robonomics_file: "" #where lies the binary file
 camera0:
   enable: true
   ip: ''
@@ -23,7 +23,7 @@ camera1:
 camera2:
   enable: true
   ip: ''
-  port: ''
+  port: '554'
   login: ''
   password: ''
   address: '' #address in parachain network

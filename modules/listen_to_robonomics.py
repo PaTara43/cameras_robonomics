@@ -38,12 +38,12 @@ def start_stream_cam(cam):
     cam.is_busy = True
     cam.stop_stream = False
 
-    #Заглушка
-    while True and not cam.stop_stream:
-        print("camera " + cam.camera_name + " is streaming")
-        time.sleep(1)
+    # #Заглушка
+    # while True and not cam.stop_stream:
+    #     print("camera " + cam.camera_name + " is streaming")
+    #     time.sleep(1)
 
-    # cam.stream()
+    cam.stream()
 
 
 def stop_stream_cam(cam):
@@ -60,12 +60,12 @@ def start_record_cam(cam):
     cam.is_busy = True
     cam.stop_record = False
 
-    #Заглушка
-    while True and not cam.stop_record:
-        print("camera " + cam.camera_name + " is recording")
-        time.sleep(1)
+    # #Заглушка
+    # while True and not cam.stop_record:
+    #     print("camera " + cam.camera_name + " is recording")
+    #     time.sleep(1)
 
-    # cam.record()
+    cam.record()
 
 
 def stop_record_cam(cam):
