@@ -3,7 +3,7 @@ import subprocess
 import time
 
 from threading import Thread
-
+from modules.send_to_ipfs import send
 def listener(config, cams):
 
     cameras = cams
@@ -22,7 +22,7 @@ def listener(config, cams):
 
                 elif ('>> ' + config['camera' + str(cam)]['address'] + " : false") in output.strip().decode('utf-8'):
                     logging.warning('Transaction to stop for ' + cameras[cam].camera_name)
-                    stop_record_cam(cameras[cam])
+                    stop_record_cam(cameras[cam], config)
 
 
 def start_record_cam(cam):
@@ -31,17 +31,12 @@ def start_record_cam(cam):
         return False
     cam.is_busy = True
     cam.stop_record = False
-
-    # #Заглушка
-    # while True and not cam.stop_record:
-    #     print("camera " + cam.camera_name + " is recording")
-    #     time.sleep(1)
-
     cam.record()
 
 
-def stop_record_cam(cam):
+def stop_record_cam(cam, config):
     if not cam.is_busy:
         logging.warning("Camera " + cam.camera_name + " is not working yet. Nothing to stop")
     cam.stop_record = True
+    send(cam, config)
     cam.is_busy = False

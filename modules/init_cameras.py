@@ -16,6 +16,7 @@ class Camera():
         self.login = config['camera'+str(camera_no)]['login']
         self.password = config['camera'+str(camera_no)]['password']
         self.camera_address = config['camera'+str(camera_no)]['address']
+        self.key = config['camera'+str(camera_no)]['key']
         self.framerate = config['camera'+str(camera_no)]['framerate']
         self.output_dir = config['general']['output_dir']
 
@@ -49,8 +50,8 @@ class Camera():
             self.connect()
             if self.connected:
                 logging.warning("Started recording image from " + self.camera_name)
-                self.out = cv2.VideoWriter(self.output_dir + 'video_' + self.camera_name + '_' + time.ctime(time.time()).replace(" ", "_") + '.avi',\
-                    self.fourcc, self.framerate, (self.width,self.height))
+                self.filename = self.output_dir + 'video_' + self.camera_name + '_' + time.ctime(time.time()).replace(" ", "_") + '.avi'
+                self.out = cv2.VideoWriter(self.filename, self.fourcc, self.framerate, (self.width,self.height))
                 while self.cap.isOpened() and not self.stop_record:
                     self.ret, self.frame = self.cap.read()
                     if not self.ret:
