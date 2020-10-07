@@ -14,6 +14,7 @@ def send(cam, config):
         except Exception as e:
             logging.error("Error while pushing to IPFS, error: ", e)
 
+    if config['general']['delete_after_record']:
         try:
             logging.warning('Removing file')
 

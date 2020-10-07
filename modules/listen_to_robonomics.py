@@ -8,7 +8,10 @@ def listener(config, cams):
 
     cameras = cams
     program = config['transaction']['path_to_robonomics_file'] + "/robonomics io read launch"
-    process = subprocess.Popen(program, shell=True, stdout=subprocess.PIPE)
+    process = subprocess.Popen(program, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    bug_catcher = Thread(target=catch_bugs, args=(config, cams, process))
+    bug_catcher.start()
 
     logging.warning("Waiting for transaction")
     while True:
@@ -19,7 +22,6 @@ def listener(config, cams):
                     logging.warning('Transaction to start for ' + cameras[cam].camera_name)
                     start_record_cam_thread = Thread(target=start_record_cam, args=(cameras[cam],))
                     start_record_cam_thread.start()
-
                 elif ('>> ' + config['camera' + str(cam)]['address'] + " : false") in output.strip().decode('utf-8'):
                     logging.warning('Transaction to stop for ' + cameras[cam].camera_name)
                     stop_record_cam(cameras[cam], config)
@@ -31,6 +33,11 @@ def start_record_cam(cam):
         return False
     cam.is_busy = True
     cam.stop_record = False
+        #Заглушка
+    # while True and not cam.stop_record:
+    #     print("camera " + cam.camera_name + " is recording")
+    #     time.sleep(1)
+
     cam.record()
 
 
@@ -40,3 +47,9 @@ def stop_record_cam(cam, config):
     cam.stop_record = True
     send(cam, config)
     cam.is_busy = False
+
+def catch_bugs(config, cams, process):
+    error = process.stderr.readline()
+    if error:
+        logging.warning("Error in listener occurred, rebooting listener")
+        listener(config, cams)

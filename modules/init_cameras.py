@@ -32,7 +32,6 @@ class Camera():
         try:
             # TODO: timeout
             self.cap = cv2.VideoCapture('rtsp://'+ self.login + ':' + self.password + '@' + self.ip + ':' + self.port + '/Streaming/Channels/101')
-            logging.warning("Capturing image from  " + self.camera_name)
             self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
             self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
             self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -67,6 +66,8 @@ class Camera():
             try:
                 if not self.connected:
                     pass
+                if not self.stop_record:
+                    logging.error("Something's wrong with connection to camera " + self.camera_name)
                 if self.stop_record:
                     logging.warning("Record from " + self.camera_name + " interrupted by transaction")
                 logging.warning("Releasing connection of " + self.camera_name)
