@@ -51,5 +51,6 @@ def stop_record_cam(cam, config):
 def catch_bugs(config, cams, process):
     error = process.stderr.readline()
     if error:
-        logging.warning("Error in listener occurred, rebooting listener")
+        logging.warning("Error in listener occurred, rebooting listener in 8 secs")
+        time.sleep(8)
         listener(config, cams)
