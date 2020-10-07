@@ -27,7 +27,6 @@ def send(cam, config):
             program = "echo \"" + res['Hash'] + "\" | " + config['transaction']['path_to_robonomics_file'] + "/robonomics io write datalog -s " + cam.key
             process = subprocess.Popen(program, shell=True, stdout=subprocess.PIPE)
             output = process.stdout.readline()
-            # print(output.strip())
             logging.warning("Published data to chain. Transaction hash is " + output.strip().decode('utf8'))
         except Exception as e:
             logging.error("Error while sending IPFS hash to chain, error: ", e)

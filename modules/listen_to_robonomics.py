@@ -33,11 +33,6 @@ def start_record_cam(cam):
         return False
     cam.is_busy = True
     cam.stop_record = False
-        #Заглушка
-    # while True and not cam.stop_record:
-    #     print("camera " + cam.camera_name + " is recording")
-    #     time.sleep(1)
-
     cam.record()
 
 

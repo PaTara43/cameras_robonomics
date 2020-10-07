@@ -12,7 +12,7 @@
 2) Manage accounts in DAPP, launch IPFS
 Create a local robonomics network node with robonomics binary file:
 ```
-./robonomics --dev
+./robonomics --dev --rpc-cors all
 ```
 **Important!** Before next launches it is necessary to remove a directory `db` with
 ```
@@ -42,4 +42,4 @@ Where `<CAMERA_ADDRESS>`  and `<EMPLOYER’S_KEY>` are replaced with  previously
 echo "OFF" | ./robonomics io write launch -r <CAMERA_ADDRESS> -s <EMPLOYER’S_KEY>
 ```
 6)
-IPFS hash of video will be available in Chainstate->datalog->CAMERA
+IPFS hash of video will be available on robonomics platform  Chainstate->datalog->CAMERA
