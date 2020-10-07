@@ -52,5 +52,6 @@ def catch_bugs(config, cams, process):
     error = process.stderr.readline()
     if error:
         logging.warning("Error in listener occurred, rebooting listener in 8 secs")
+        process.kill()
         time.sleep(8)
         listener(config, cams)
