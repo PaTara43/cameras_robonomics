@@ -1,8 +1,8 @@
 # Cameras record under Robonomics parachain control
 
 ### Record or stream from several ip cameras using Robonomics tools
-
-- pip install -r requirements.txt
+- [Python 3](https://docs.python-guide.org/starting/install3/linux/) 
+- pip3 install -r requirements.txt
 - Robonomics node (binary file) (download latest release [here](https://github.com/airalab/robonomics/releases))
 - IPFS 0.4.22 (download from [here](https://dist.ipfs.io/go-ipfs/v0.4.22/go-ipfs_v0.4.22_linux-386.tar.gz) and install)
 
