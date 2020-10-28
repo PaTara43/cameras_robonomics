@@ -48,5 +48,7 @@ def catch_bugs(config, cams, process):
     if error:
         logging.warning("Error in listener occurred, rebooting listener in 8 secs")
         process.kill()
-        time.sleep(8)
+        if ("TypeSizeUnavailable") in error.strip().decode('utf-8'):
+            time.sleep(7)
+        time.sleep(1)
         listener(config, cams)
