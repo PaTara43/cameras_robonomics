@@ -3,7 +3,7 @@ general:
   num_cams: 3 #must mathc with camerai number
   delete_after_record: true
 transaction:
-  path_to_robonomics_file: "" #where lies the binaty file/ ends with a "/"
+  path_to_robonomics_file: "" #where lies the binaty file
   #remote: ''
 camera0:
   enable: true
@@ -35,9 +35,9 @@ camera2:
 ipfs:
   enable: true
   #ipfs_provider: ""
-temporal:
-  temporal_username: ""
-  temporal_password: ""
+pinata:
+  pinata_api: ""
+  pinata_secret_api: ""
 datalog:
   enable: true
   #remote: ""
