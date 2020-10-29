@@ -44,7 +44,7 @@ def _pin_to_temporal(config, file_path: str):
 
             url_add = "https://api.temporal.cloud/v2/ipfs/public/file/add"
             headers = {"Authorization": f"Bearer {token['token']}"}
-            resp = requests.post(url_add, files={"file":open(file_path), "hold_time":(None,1)}, headers=headers)
+            resp = requests.post(url_add, files={"file":open(file_path), "hold_time":(None,'1')}, headers=headers)
 
             if resp.status_code == 200:
                 logging.warning("File pinned to Temporal Cloud")
