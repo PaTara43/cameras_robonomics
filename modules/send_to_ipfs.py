@@ -27,7 +27,7 @@ def send(cam, config):
 
     if config['datalog']['enable']:
         try:
-            program = "echo \"" + res['Hash'] + "\" | " + config['transaction']['path_to_robonomics_file'] + "/robonomics io write datalog -s " + cam.key
+            program = "echo \"" + res['Hash'] + "\" | " + config['transaction']['path_to_robonomics_file'] + "robonomics io write datalog -s " + cam.key
             process = subprocess.Popen(program, shell=True, stdout=subprocess.PIPE)
             output = process.stdout.readline()
             logging.warning("Published data to chain. Transaction hash is " + output.strip().decode('utf8'))

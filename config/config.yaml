@@ -3,7 +3,7 @@ general:
   num_cams: 3 #must mathc with camerai number
   delete_after_record: true
 transaction:
-  path_to_robonomics_file: "" #where lies the binaty file
+  path_to_robonomics_file: "" #where lies the binaty file/ ends with a "/"
   #remote: ''
 camera0:
   enable: true

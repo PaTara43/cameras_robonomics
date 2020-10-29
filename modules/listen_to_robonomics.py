@@ -7,7 +7,7 @@ from modules.send_to_ipfs import send
 def listener(config, cams):
 
     cameras = cams
-    program = config['transaction']['path_to_robonomics_file'] + "/robonomics io read launch"
+    program = config['transaction']['path_to_robonomics_file'] + "robonomics io read launch"
     process = subprocess.Popen(program, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     bug_catcher = Thread(target=catch_bugs, args=(config, cams, process))
