@@ -9,13 +9,18 @@ from pinatapy import PinataPy
 
 
 def send(cam, config):
+    if config['pinata']['enable']:
+        try:
+            _pin_to_pinata(config, cam.filename)
+        except Exception as e:
+            logging.error("Camera " + cam.camera_name + " Error while pinning gto pinata, error: ", e)
+
     if config['ipfs']['enable']:
         try:
             logging.warning("Camera " + cam.camera_name + ' Pushing to IPFS')
             client = ipfshttpclient.connect()
             res = client.add(cam.filename)
             logging.warning("Camera " + cam.camera_name + ' Pushed, hash: ' + res['Hash'])
-            _pin_to_pinata(config, cam.filename)
         except Exception as e:
             logging.error("Camera " + cam.camera_name + " Error while pushing to IPFS, error: ", e)
 

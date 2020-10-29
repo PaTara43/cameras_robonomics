@@ -36,6 +36,7 @@ ipfs:
   enable: true
   #ipfs_provider: ""
 pinata:
+  enable: true
   pinata_api: ""
   pinata_secret_api: ""
 datalog:
