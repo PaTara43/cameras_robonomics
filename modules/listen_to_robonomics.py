@@ -46,9 +46,7 @@ def stop_record_cam(cam, config):
 def catch_bugs(config, cams, process):
     error = process.stderr.readline()
     if error:
-        logging.warning("Error in listener occurred, rebooting listener in 8 secs")
+        logging.warning("Error in listener occurred, rebooting listener")
         process.kill()
-        if ("TypeSizeUnavailable") in error.strip().decode('utf-8'):
-            time.sleep(7)
-        time.sleep(1)
+        time.sleep(2)
         listener(config, cams)

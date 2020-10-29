@@ -35,6 +35,9 @@ camera2:
 ipfs:
   enable: true
   #ipfs_provider: ""
+temporal:
+  temporal_username: ""
+  temporal_password: ""
 datalog:
   enable: true
   #remote: ""

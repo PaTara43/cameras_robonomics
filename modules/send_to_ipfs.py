@@ -1,6 +1,8 @@
 import ipfshttpclient
+import json
 import logging
 import os
+import requests
 import subprocess
 
 
@@ -11,6 +13,7 @@ def send(cam, config):
             client = ipfshttpclient.connect()
             res = client.add(cam.filename)
             logging.warning('Pushed, hash: ' + res['Hash'])
+            _pin_to_temporal(config, cam.filename)
         except Exception as e:
             logging.error("Error while pushing to IPFS, error: ", e)
 
@@ -30,3 +33,18 @@ def send(cam, config):
             logging.warning("Published data to chain. Transaction hash is " + output.strip().decode('utf8'))
         except Exception as e:
             logging.error("Error while sending IPFS hash to chain, error: ", e)
+
+def _pin_to_temporal(config, file_path: str):
+        username = config["temporal"]["temporal_username"]
+        password = config["temporal"]["temporal_password"]
+        if username and password:
+            auth_url = "https://api.temporal.cloud/v2/auth/login"
+            token_resp = requests.post(auth_url, json={"username": username, "password": password})
+            token = token_resp.json()
+
+            url_add = "https://api.temporal.cloud/v2/ipfs/public/file/add"
+            headers = {"Authorization": f"Bearer {token['token']}"}
+            resp = requests.post(url_add, files={"file":open(file_path), "hold_time":(None,1)}, headers=headers)
+
+            if resp.status_code == 200:
+                logging.warning("File pinned to Temporal Cloud")
