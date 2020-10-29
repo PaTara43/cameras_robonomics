@@ -32,9 +32,6 @@ camera2:
   address: '' #address in parachain network
   key: '' #secret key in robonomics network
   framerate: 50 #for recording
-ipfs:
-  enable: true
-  #ipfs_provider: ""
 pinata:
   enable: true
   pinata_api: ""
