@@ -44,9 +44,9 @@ def stop_record_cam(cam, config):
     cam.is_busy = False
 
 def catch_bugs(config, cams, program_read):
-    error = program_read.stderr.readline()
+    error = process_read.stderr.readline()
     if error:
         logging.warning("Error in listener occurred, rebooting listener")
-        program_read.kill()
+        process_read.kill()
         time.sleep(2)
         listener(config, cams)
