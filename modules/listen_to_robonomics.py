@@ -15,7 +15,7 @@ def listener(config, cams):
 
     logging.warning("Waiting for transaction")
     while True:
-        output = process.stdout.readline()
+        output = process_read.stdout.readline()
         if output:
             for cam in cameras.keys():
                 if (">> " + config['camera' + str(cam)]['address'] + " : true") in output.strip().decode('utf-8'):
