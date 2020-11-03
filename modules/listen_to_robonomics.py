@@ -10,7 +10,7 @@ def listener(config, cams):
     program_read = config['transaction']['path_to_robonomics_file'] + "robonomics io read launch"
     process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    bug_catcher = Thread(target=catch_bugs, args=(config, cams, program_read))
+    bug_catcher = Thread(target=catch_bugs, args=(config, cams, process_read))
     bug_catcher.start()
 
     logging.warning("Waiting for transaction")
@@ -40,10 +40,11 @@ def stop_record_cam(cam, config):
     if not cam.is_busy:
         logging.warning("Camera " + cam.camera_name + " is not working yet. Nothing to stop")
     cam.stop_record = True
+    time.sleep(1)
     send(cam, config)
     cam.is_busy = False
 
-def catch_bugs(config, cams, program_read):
+def catch_bugs(config, cams, process_read):
     error = process_read.stderr.readline()
     if error:
         logging.warning("Error in listener occurred, rebooting listener")
