@@ -35,5 +35,6 @@ class Camera():
         while not self.stop_record:
             continue
         self.process_ffmpeg.communicate(input = b'q')[0]
-        # self.process_ffmpeg.kill()
         logging.warning("Stoped recording image from " + self.camera_name)
+        time.sleep(1)
+        self.process_ffmpeg.kill()

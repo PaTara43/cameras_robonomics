@@ -24,7 +24,8 @@ def listener(config, cams):
                     start_record_cam_thread.start()
                 elif ('>> ' + config['camera' + str(cam)]['address'] + " : false") in output.strip().decode('utf-8'):
                     logging.warning('Transaction to stop for ' + cameras[cam].camera_name)
-                    stop_record_cam(cameras[cam], config)
+                    stop_record_cam_thread = Thread(target=stop_record_cam, args=(cameras[cam],config,))
+                    stop_record_cam_thread.start()
 
 
 def start_record_cam(cam):
