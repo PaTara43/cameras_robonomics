@@ -7,10 +7,10 @@ from modules.send_to_ipfs import send
 def listener(config, cams):
 
     cameras = cams
-    program = config['transaction']['path_to_robonomics_file'] + "robonomics io read launch"
-    process = subprocess.Popen(program, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    program_read = config['transaction']['path_to_robonomics_file'] + "robonomics io read launch"
+    process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    bug_catcher = Thread(target=catch_bugs, args=(config, cams, process))
+    bug_catcher = Thread(target=catch_bugs, args=(config, cams, program_read))
     bug_catcher.start()
 
     logging.warning("Waiting for transaction")
@@ -43,10 +43,10 @@ def stop_record_cam(cam, config):
     send(cam, config)
     cam.is_busy = False
 
-def catch_bugs(config, cams, process):
-    error = process.stderr.readline()
+def catch_bugs(config, cams, program_read):
+    error = program_read.stderr.readline()
     if error:
         logging.warning("Error in listener occurred, rebooting listener")
-        process.kill()
+        program_read.kill()
         time.sleep(2)
         listener(config, cams)
