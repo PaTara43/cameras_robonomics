@@ -1,6 +1,7 @@
 import cv2
 import logging
 import time
+import subprocess
 
 from threading import Thread
 
@@ -24,56 +25,15 @@ class Camera():
         self.stop_stream = False
         self.stop_record = False
 
-
-    def connect(self) -> bool:
-
-        logging.warning("Connecting to " + self.camera_name)
-
-        try:
-            # TODO: timeout
-            self.cap = cv2.VideoCapture('rtsp://'+ self.login + ':' + self.password + '@' + self.ip + ':' + self.port + '/Streaming/Channels/101')
-            self.width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-            self.height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            self.fourcc = cv2.VideoWriter_fourcc(*'XVID')
-            self.connected = True
-
-
-        except Exception as e:
-            logging.error("Failed to connect to " + self.camera_name + '. \nError: ' + e)
-            self.connected = False
-
-
     def record(self):
 
-        try:
-            self.connect()
-            if self.connected:
-                logging.warning("Started recording image from " + self.camera_name)
-                self.filename = self.output_dir + 'video_' + self.camera_name + '_' + time.ctime(time.time()).replace(" ", "_") + '.avi'
-                self.out = cv2.VideoWriter(self.filename, self.fourcc, self.framerate, (self.width,self.height))
-                while self.cap.isOpened() and not self.stop_record:
-                    self.ret, self.frame = self.cap.read()
-                    if not self.ret:
-                        logging.error("Failed to grab frame from " + self.camera_name + ". Stopping recording")
-                        break
-
-                    self.out.write(self.frame)
-            else:
-                logging.error("No connection established with " + self.camera_name + ", record unavailable")
-        except Exception as e:
-            logging.error("Error while recording " + self.camera_name + ". Stopping recording.\nError: ", + e)
-        finally:
-            try:
-                if not self.connected:
-                    pass
-                if not self.stop_record:
-                    logging.error("Something's wrong with connection to camera " + self.camera_name)
-                if self.stop_record:
-                    logging.warning("Record from " + self.camera_name + " interrupted by transaction")
-                logging.warning("Releasing connection of " + self.camera_name)
-                self.cap.release()
-                self.out.release()
-                cv2.destroyAllWindows()
-                logging.warning("Connection of " + self.camera_name + " released")
-            except Exception as e:
-                logging.error("Error while releasing " + self.camera_name + ".\nError: ", + e)
+        self.filename = self.camera_name + '_' + time.ctime(time.time()).replace(" ", "_") + '.mp4'
+        self.program = 'ffmpeg -loglevel debug -rtsp_transport tcp -i "rtsp://' + self.login + ':' + self.password + '@' + self.ip \
+            + ':' + self.port + '/Streamin/Channels/101" -c copy -map 0 ' + self.filename
+        self.process = subprocess.Popen(self.program, shell=True)
+        logging.warning("Started recording image from " + self.camera_name)
+        while not self.stop_record:
+            logging.warning(self.camera_name + ' is recording')
+            time.sleep(2)
+        self.process.kill()
+        logging.warning("Stoped recording image from " + self.camera_name)
