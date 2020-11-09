@@ -1,30 +1,10 @@
 general:
   output_dir: "" #ends with a "/"
-  num_cams: 3 #must mathc with camerai number
   delete_after_record: true
 transaction:
-  path_to_robonomics_file: "" #where lies the binaty file
-  #remote: ''
-camera0:
-  enable: true
-  ip: ''
-  port: ''
-  login: ''
-  password: ''
-  address: '' #address in parachain network
-  key: '' #secret key in robonomics network
-  framerate: 50 #for recording
-camera1:
-  enable: true
-  ip: ''
-  port: ''
-  login: ''
-  password: ''
-  address: '' #address in parachain network
-  key: '' #secret key in robonomics network
-  framerate: 50 #for recording
-camera2:
-  enable: true
+  path_to_robonomics_file: "" #where lies the binaty file, ends with a binary filename
+  remote: ''
+camera:
   ip: ''
   port: ''
   login: ''
@@ -38,4 +18,3 @@ pinata:
   pinata_secret_api: ""
 datalog:
   enable: true
-  #remote: ""

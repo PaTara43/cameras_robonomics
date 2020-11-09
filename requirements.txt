@@ -1,2 +1,0 @@
-opencv-python==4.4.0.42
-ipfshttpclient==0.6.1

@@ -32,19 +32,11 @@ class Error(Exception):
 def listen_to_robonomics_func(config, cams):
 
     logging.warning("Listening to robonomics")
-    listener(config, cams)
+    listener(config, cam)
 
 
 if __name__ == '__main__':
     dirname = os.path.dirname(os.path.abspath(__file__))
     config = read_configuration()
-
-    cams = {}
-    try:
-        for i in range(config['general']['num_cams']):
-            if config['camera'+str(i)]['enable']:
-                cams[i] = Camera(i, config)
-    except KeyError:
-        logging.error("Number of cameras in config file doesn't match cameras' parameters blocks")
-        exit()
-    listen_to_robonomics_func(config, cams)
+    cam = Camera(config)
+    listen_to_robonomics_func(config, cam)
