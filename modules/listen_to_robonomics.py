@@ -4,7 +4,8 @@ import time
 
 from threading import Thread
 from modules.send_to_ipfs import send
-
+from modules.url_generator import create_url
+# from modules.link_to_printer import Task
 
 def listener(config, cam):
 
@@ -22,6 +23,8 @@ def listener(config, cam):
                 logging.warning('Transaction to start recording')
                 start_record_cam_thread = Thread(target=start_record_cam, args=(cam,))
                 start_record_cam_thread.start()
+                create_url_r_thread = Thread(target=create_url_r, args=(cam,))
+                create_url_r_thread.start()
             elif ('>> ' + config['camera']['address'] + " : false") in output.strip().decode('utf-8'):
                 logging.warning('Transaction to stop recording')
                 stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam,config,))
@@ -46,6 +49,7 @@ def stop_record_cam(cam, config):
     send(cam, config)
     cam.is_busy = False
 
+
 def catch_bugs(config, cam, process_read):
     error = process_read.stderr.readline()
     if error:
@@ -53,3 +57,8 @@ def catch_bugs(config, cam, process_read):
         process_read.kill()
         time.sleep(2)
         listener(config, cam)
+
+
+def create_url_r(cam):
+    cam.keyword, cam.link = create_url()
+    #Task.send_task_to_printer(cam.link)

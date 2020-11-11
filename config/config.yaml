@@ -16,5 +16,7 @@ pinata:
   enable: true
   pinata_api: ""
   pinata_secret_api: ""
+ipfs:
+  enable: true
 datalog:
   enable: true

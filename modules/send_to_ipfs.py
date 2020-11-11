@@ -6,21 +6,38 @@ import requests
 import subprocess
 
 from pinatapy import PinataPy
+from modules.url_generator import update_url
 
 
 def send(cam, config):
-    logging.warning("Camera is sending file to pinata")
+
+    if config['ipfs']['enable']:
+        try:
+            logging.warning("Camera is publishing file to IPFS")
+            client = ipfshttpclient.connect()
+            res = client.add(cam.filename)
+            logging.warning('Published to IPFS, hash: ' + res['Hash'])
+        except Exception as e:
+            logging.error("Error while publishing to IPFS , error: ", e)
+
 
     if config['pinata']['enable']:
         try:
+            logging.warning("Camera is sending file to pinata")
             hash = _pin_to_pinata(cam, config)
         except Exception as e:
             logging.error("Error while pinning to pinata, error: ", e)
 
+    if hash:
+        try:
+            logging.warning("Updating URL")
+            update_url(cam.keyword, hash)
+        except Exception as e:
+            logging.error("Error while updating URL, error: ", e)
+
     if config['general']['delete_after_record']:
         try:
             logging.warning('Removing file')
-
             os.remove(cam.filename)
         except Exception as e:
             logging.error("Error while deleteng file, error: ", e)
