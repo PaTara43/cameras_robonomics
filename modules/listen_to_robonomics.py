@@ -1,11 +1,14 @@
 import logging
+import qrcode
 import subprocess
 import time
 
-from threading import Thread
+# from modules.link_to_printer import Task
 from modules.send_to_ipfs import send
 from modules.url_generator import create_url
-# from modules.link_to_printer import Task
+from PIL import Image
+from threading import Thread
+
 
 def listener(config, cam):
 
@@ -61,4 +64,16 @@ def catch_bugs(config, cam, process_read):
 
 def create_url_r(cam):
     cam.keyword, cam.link = create_url()
+    logging.warning(cam.link)
+
+    robonomics = Image.open('robonomics.jpg').resize((100,100))
+    qr_big = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
+    qr_big.add_data('https://'+cam.link)
+    qr_big.make()
+    img_qr_big = qr_big.make_image().convert('RGB')
+
+    pos = ((img_qr_big.size[0] - robonomics.size[0]) // 2, (img_qr_big.size[1] - robonomics.size[1]) // 2)
+
+    img_qr_big.paste(robonomics, pos)
+    img_qr_big.save(cam.output_dir + 'qr.png')
     #Task.send_task_to_printer(cam.link)
