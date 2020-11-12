@@ -66,7 +66,7 @@ def create_url_r(cam):
     cam.keyword, cam.link = create_url()
     logging.warning(cam.link)
 
-    robonomics = Image.open('robonomics.jpg').resize((100,100))
+    robonomics = Image.open(cam.output_dir + '../modules/robonomics.jpg').resize((100,100))
     qr_big = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
     qr_big.add_data('https://'+cam.link)
     qr_big.make()
