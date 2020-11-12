@@ -4,3 +4,4 @@ config/config0.yaml
 config/config_pi.yaml
 config/config1.yaml
 output/*
+requirenments.txt
