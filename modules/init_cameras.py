@@ -27,7 +27,7 @@ class Camera():
 
     def record(self):
 
-        self.filename = self.camera_name + '_' + time.ctime(time.time()).replace(" ", "_") + '.mp4'
+        self.filename = self.output_dir + self.camera_name + '_' + time.ctime(time.time()).replace(" ", "_") + '.mp4'
         self.program_ffmpeg= 'ffmpeg -loglevel debug -rtsp_transport tcp -i "rtsp://' + self.login + ':' + self.password + '@' + self.ip \
             + ':' + self.port + '/Streaming/Channels/101" -c copy -map 0 ' + self.filename
         self.process_ffmpeg = subprocess.Popen("exec " + self.program_ffmpeg, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
