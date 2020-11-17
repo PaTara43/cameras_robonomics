@@ -3,7 +3,7 @@ import qrcode
 import subprocess
 import time
 
-# from modules.link_to_printer import Task
+from modules.link_to_printer import Task
 from modules.send_to_ipfs import send
 from modules.url_generator import create_url
 from PIL import Image
@@ -75,5 +75,7 @@ def create_url_r(cam):
     pos = ((img_qr_big.size[0] - robonomics.size[0]) // 2, (img_qr_big.size[1] - robonomics.size[1]) // 2)
 
     img_qr_big.paste(robonomics, pos)
-    img_qr_big.save(cam.output_dir + 'qr.png')
-    #Task.send_task_to_printer(cam.link)
+    cam.qrpic = cam.output_dir + 'qr.png'
+    img_qr_big.save(cam.qrpic)
+    printer = Task()
+    printer.send_task_to_printer(cam.qrpic)
