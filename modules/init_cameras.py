@@ -3,9 +3,6 @@ import logging
 import time
 import subprocess
 
-from threading import Thread
-
-
 class Camera():
 
 
