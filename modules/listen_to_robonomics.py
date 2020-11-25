@@ -10,7 +10,7 @@ from PIL import Image
 from threading import Thread
 
 
-def listener(config, cam):
+def listener(config, cam, dirname):
 
     program_read = config['transaction']['path_to_robonomics_file'] + " io read launch"
     process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -26,7 +26,7 @@ def listener(config, cam):
                 logging.warning('Transaction to start recording')
                 start_record_cam_thread = Thread(target=start_record_cam, args=(cam,))
                 start_record_cam_thread.start()
-                create_url_r_thread = Thread(target=create_url_r, args=(cam,))
+                create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
                 create_url_r_thread.start()
             elif ('>> ' + config['camera']['address'] + " : false") in output.strip().decode('utf-8'):
                 logging.warning('Transaction to stop recording')
@@ -62,11 +62,11 @@ def catch_bugs(config, cam, process_read):
         listener(config, cam)
 
 
-def create_url_r(cam):
+def create_url_r(cam, dirname):
     cam.keyword, cam.link = create_url()
     logging.warning(cam.link)
 
-    robonomics = Image.open(cam.output_dir + '../modules/robonomics.jpg').resize((100,100))
+    robonomics = Image.open(dirname + '/modules/robonomics.jpg').resize((100,100))
     qr_big = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
     qr_big.add_data('https://'+cam.link)
     qr_big.make()

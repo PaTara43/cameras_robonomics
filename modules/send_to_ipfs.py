@@ -18,7 +18,7 @@ def send(cam, config):
             res = client.add(cam.filename)
             logging.warning('Published to IPFS, hash: ' + res['Hash'])
         except Exception as e:
-            logging.error("Error while publishing to IPFS , error: ", e)
+            logging.error("Error while publishing to IPFS, error: ", e)
 
 
     if config['pinata']['enable']:

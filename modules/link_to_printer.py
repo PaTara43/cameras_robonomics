@@ -2,7 +2,7 @@ import cups
 import logging
 import time
 
-class Task(self):
+class Task():
 
     def __init__(self):
         logging.warning("Initializing printer")

@@ -7,7 +7,7 @@ from modules.init_cameras import Camera
 from modules.listen_to_robonomics import listener
 from threading import Thread
 
-def read_configuration() -> dict:
+def read_configuration(dirname) -> dict:
 
     config_path = dirname + '/config/config.yaml'
     logging.debug(config_path)
@@ -29,14 +29,10 @@ def read_configuration() -> dict:
 class Error(Exception):
     pass
 
-def listen_to_robonomics_func(config, cams):
-
-    logging.warning("Listening to robonomics")
-    listener(config, cam)
-
 
 if __name__ == '__main__':
     dirname = os.path.dirname(os.path.abspath(__file__))
-    config = read_configuration()
+    config = read_configuration(dirname)
     cam = Camera(config)
-    listen_to_robonomics_func(config, cam)
+    logging.warning("Listening to robonomics")
+    listener(config, cam, dirname)

@@ -1,4 +1,3 @@
-import cv2
 import logging
 import time
 import subprocess
