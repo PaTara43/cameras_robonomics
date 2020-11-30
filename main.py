@@ -7,7 +7,7 @@ from modules.init_cameras import Camera
 from modules.listen_to_robonomics import listener
 from threading import Thread
 
-def read_configuration() -> dict:
+def read_configuration(dirname) -> dict:
 
     config_path = dirname + '/config/config.yaml'
     logging.debug(config_path)
@@ -29,22 +29,10 @@ def read_configuration() -> dict:
 class Error(Exception):
     pass
 
-def listen_to_robonomics_func(config, cams):
-
-    logging.warning("Listening to robonomics")
-    listener(config, cams)
-
 
 if __name__ == '__main__':
     dirname = os.path.dirname(os.path.abspath(__file__))
-    config = read_configuration()
-
-    cams = {}
-    try:
-        for i in range(config['general']['num_cams']):
-            if config['camera'+str(i)]['enable']:
-                cams[i] = Camera(i, config)
-    except KeyError:
-        logging.error("Number of cameras in config file doesn't match cameras' parameters blocks")
-        exit()
-    listen_to_robonomics_func(config, cams)
+    config = read_configuration(dirname)
+    cam = Camera(config)
+    logging.warning("Listening to robonomics")
+    listener(config, cam, dirname)
