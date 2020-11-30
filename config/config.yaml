@@ -3,7 +3,7 @@ general:
   delete_after_record: true
 transaction:
   path_to_robonomics_file: "" #where lies the binaty file, ends with a binary filename
-  remote: ''
+  remote: '' #e.g. ws://127.0.0.1:9944
 camera:
   ip: ''
   port: ''

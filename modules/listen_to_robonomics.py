@@ -12,7 +12,7 @@ from threading import Thread
 
 def listener(config, cam, dirname):
 
-    program_read = config['transaction']['path_to_robonomics_file'] + " io read launch"
+    program_read = config['transaction']['path_to_robonomics_file'] + " io read launch --remote " + config['transaction']['remote']
     process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     bug_catcher = Thread(target=catch_bugs, args=(config, cam, process_read, dirname,))
