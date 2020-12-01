@@ -47,6 +47,7 @@ def start_record_cam(cam):
 def stop_record_cam(cam, config):
     if not cam.is_busy:
         logging.warning("Camera is not recording yet. Nothing to stop")
+        return False
     cam.stop_record = True
     time.sleep(1)
     send(cam, config)

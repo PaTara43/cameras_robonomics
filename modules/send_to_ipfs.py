@@ -39,6 +39,7 @@ def send(cam, config):
         try:
             logging.warning('Removing file')
             os.remove(cam.filename)
+            os.remove(cam.qrpic)
         except Exception as e:
             logging.error("Error while deleteng file, error: ", e)
 
