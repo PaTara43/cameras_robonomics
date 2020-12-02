@@ -24,11 +24,18 @@ def listener(config, cam, dirname):
         if output:
             if (">> " + config['camera']['address'] + " : true") in output.strip().decode('utf-8'):
                 logging.warning('Transaction to start recording')
+                if cam.is_busy:
+                    logging.warning("Camera is busy. Record aborted")
+                    continue
+                cam.is_busy = True
                 start_record_cam_thread = Thread(target=start_record_cam, args=(cam,))
                 start_record_cam_thread.start()
                 create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
                 create_url_r_thread.start()
             elif ('>> ' + config['camera']['address'] + " : false") in output.strip().decode('utf-8'):
+                if not cam.is_busy:
+                    logging.warning("Camera is not recording yet. Nothing to stop")
+                    continue
                 logging.warning('Transaction to stop recording')
                 stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam,config,))
                 stop_record_cam_thread.start()
@@ -36,18 +43,11 @@ def listener(config, cam, dirname):
 
 
 def start_record_cam(cam):
-    if cam.is_busy:
-        logging.warning("Camera is busy. Record aborted")
-        return False
-    cam.is_busy = True
     cam.stop_record = False
     cam.record()
 
 
 def stop_record_cam(cam, config):
-    if not cam.is_busy:
-        logging.warning("Camera is not recording yet. Nothing to stop")
-        return False
     cam.stop_record = True
     time.sleep(1)
     send(cam, config)
