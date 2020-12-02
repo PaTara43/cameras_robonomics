@@ -16,7 +16,8 @@ def send(cam, config):
             logging.warning("Camera is publishing file to IPFS")
             client = ipfshttpclient.connect()
             res = client.add(cam.filename)
-            logging.warning('Published to IPFS, hash: ' + res['Hash'])
+            hash = res['Hash']
+            logging.warning('Published to IPFS, hash: ' + hash)
         except Exception as e:
             logging.error("Error while publishing to IPFS, error: ", e)
 
@@ -24,7 +25,7 @@ def send(cam, config):
     if config['pinata']['enable']:
         try:
             logging.warning("Camera is sending file to pinata")
-            hash = _pin_to_pinata(cam, config)
+            hash_pinata = _pin_to_pinata(hash, config)
         except Exception as e:
             logging.error("Error while pinning to pinata, error: ", e)
 
@@ -54,11 +55,11 @@ def send(cam, config):
             logging.error("Error while sending IPFS hash to chain, error: ", e)
 
 
-def _pin_to_pinata(cam, config):
+def _pin_to_pinata(hash, config):
         pinata_api = config["pinata"]["pinata_api"]
         pinata_secret_api = config["pinata"]["pinata_secret_api"]
         if pinata_api and pinata_secret_api:
             pinata = PinataPy(pinata_api, pinata_secret_api)
-            pinata.pin_file_to_ipfs(cam.filename)
+            pinata.pin_hash_to_ipfs(hash)
             logging.warning("Pinata hash is " + pinata.pin_list()['rows'][0]['ipfs_pin_hash'])
             return pinata.pin_list()['rows'][0]['ipfs_pin_hash']
