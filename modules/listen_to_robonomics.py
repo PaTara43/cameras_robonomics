@@ -76,7 +76,7 @@ def create_url_r(cam, dirname):
     pos = ((img_qr_big.size[0] - robonomics.size[0]) // 2, (img_qr_big.size[1] - robonomics.size[1]) // 2)
 
     img_qr_big.paste(robonomics, pos)
-    cam.qrpic = cam.output_dir + 'qr.png'
+    cam.qrpic = cam.output_dir + time.ctime(time.time()).replace(" ", "_") + 'qr.png'
     img_qr_big.save(cam.qrpic)
     printer = Task()
     printer.send_task_to_printer(cam.qrpic)
