@@ -64,9 +64,6 @@ def catch_bugs(config, cam, process_read, dirname):
 
 
 def create_url_r(cam, dirname):
-    if cam.is_busy:
-        logging.warning("Camera is busy. Record aborted")
-        return False
     cam.keyword, cam.link = create_url()
     logging.warning(cam.link)
 
