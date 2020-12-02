@@ -9,13 +9,13 @@ from pinatapy import PinataPy
 from modules.url_generator import update_url
 
 
-def send(cam, config):
+def send(filename, keyword, qrpic, config):
 
     if config['ipfs']['enable']:
         try:
             logging.warning("Camera is publishing file to IPFS")
             client = ipfshttpclient.connect()
-            res = client.add(cam.filename)
+            res = client.add(filename)
             hash = res['Hash']
             logging.warning('Published to IPFS, hash: ' + hash)
         except Exception as e:
@@ -32,22 +32,22 @@ def send(cam, config):
     if hash:
         try:
             logging.warning("Updating URL")
-            update_url(cam.keyword, hash)
+            update_url(keyword, hash)
         except Exception as e:
             logging.error("Error while updating URL, error: ", e)
 
     if config['general']['delete_after_record']:
         try:
             logging.warning('Removing file')
-            os.remove(cam.filename)
-            os.remove(cam.qrpic)
+            os.remove(filename)
+            os.remove(qrpic)
         except Exception as e:
             logging.error("Error while deleteng file, error: ", e)
 
     if config['datalog']['enable']:
         try:
             program = "echo \"" + hash + "\" | " + config['transaction']['path_to_robonomics_file'] + "\
-             io write datalog --remote " + config['transaction']['remote'] + " -s " + cam.key
+             io write datalog --remote " + config['transaction']['remote'] + " -s " + config['camera']['key']
             process = subprocess.Popen(program, shell=True, stdout=subprocess.PIPE)
             output = process.stdout.readline()
             logging.warning("Published data to chain. Transaction hash is " + output.strip().decode('utf8'))

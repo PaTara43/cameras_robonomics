@@ -37,7 +37,7 @@ def listener(config, cam, dirname):
                     logging.warning("Camera is not recording yet. Nothing to stop")
                     continue
                 logging.warning('Transaction to stop recording')
-                stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam,config,))
+                stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config,))
                 stop_record_cam_thread.start()
 
 
@@ -47,11 +47,11 @@ def start_record_cam(cam):
     cam.record()
 
 
-def stop_record_cam(cam, config):
+def stop_record_cam(filename, keyword, qrpic, config):
     cam.stop_record = True
-    time.sleep(1)
-    send(cam, config)
     cam.is_busy = False
+    time.sleep(1)
+    send(filename, keyword, qrpic, config)
 
 
 def catch_bugs(config, cam, process_read, dirname):
