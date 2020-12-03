@@ -24,9 +24,10 @@ def send(filename, keyword, qrpic, config):
 
     if config['pinata']['enable']:
         try:
-            logging.warning("Camera is pinning hash to pinata")
+            logging.warning("Camera is sending file to pinata")
             hash_pinata = _pin_to_pinata(filename, config)
-            #hash_pinata = _pin_to_pinata(hash, config)
+            # logging.warning("Camera is pinning hash to pinata")
+            # hash_pinata = _pin_to_pinata(hash, config)
         except Exception as e:
             logging.error("Error while pinning to pinata, error: ", e)
 
@@ -56,12 +57,20 @@ def send(filename, keyword, qrpic, config):
             logging.error("Error while sending IPFS hash to chain, error: ", e)
 
 
-def _pin_to_pinata(hash, config):
-        pinata_api = config["pinata"]["pinata_api"]
-        pinata_secret_api = config["pinata"]["pinata_secret_api"]
-        if pinata_api and pinata_secret_api:
-            pinata = PinataPy(pinata_api, pinata_secret_api)
-            pinata.pin_file_to_ipfs(filename)
-            #pinata.add_hash_to_pin_queue(hash)
-            logging.warning("Hash added to pin queue")
-            return pinata.pin_list()['rows'][0]['ipfs_pin_hash']
+# def _pin_to_pinata(hash, config):
+#     pinata_api = config["pinata"]["pinata_api"]
+#     pinata_secret_api = config["pinata"]["pinata_secret_api"]
+#     if pinata_api and pinata_secret_api:
+#         pinata = PinataPy(pinata_api, pinata_secret_api)
+#         pinata.add_hash_to_pin_queue(hash)
+#         logging.warning("Hash added to pin queue")
+#         return pinata.pin_list()['rows'][0]['ipfs_pin_hash']
+
+def _pin_to_pinata(filename, config):
+    pinata_api = config["pinata"]["pinata_api"]
+    pinata_secret_api = config["pinata"]["pinata_secret_api"]
+    if pinata_api and pinata_secret_api:
+        pinata = PinataPy(pinata_api, pinata_secret_api)
+        pinata.pin_file_to_ipfs(filename)
+        logging.warning("File sent")
+        return pinata.pin_list()['rows'][0]['ipfs_pin_hash']

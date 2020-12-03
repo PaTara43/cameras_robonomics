@@ -15,11 +15,18 @@ def listener(config, cam, dirname):
     program_read = config['transaction']['path_to_robonomics_file'] + " io read launch --remote " + config['transaction']['remote']
     process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    bug_catcher = Thread(target=catch_bugs, args=(config, cam, process_read, dirname,))
-    bug_catcher.start()
+    # bug_catcher = Thread(target=catch_bugs, args=(config, cam, process_read, dirname,))
+    # bug_catcher.start()
 
     logging.warning("Waiting for transaction")
     while True:
+        error = process_read.stderr.readline()
+        if error:
+            logging.warning("Error in listener occurred, rebooting listener")
+            process_read.kill()
+            time.sleep(2)
+            process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            continue
         output = process_read.stdout.readline()
         if output:
             if (">> " + config['camera']['address'] + " : true") in output.strip().decode('utf-8'):
@@ -54,13 +61,13 @@ def stop_record_cam(filename, keyword, qrpic, config):
     send(filename, keyword, qrpic, config)
 
 
-def catch_bugs(config, cam, process_read, dirname):
-    error = process_read.stderr.readline()
-    if error:
-        logging.warning("Error in listener occurred, rebooting listener")
-        process_read.kill()
-        time.sleep(2)
-        listener(config, cam, dirname)
+# def catch_bugs(config, cam, process_read, dirname):
+#     error = process_read.stderr.readline()
+#     if error:
+#         logging.warning("Error in listener occurred, rebooting listener")
+#         process_read.kill()
+#         time.sleep(2)
+#         listener(config, cam, dirname)
 
 
 def create_url_r(cam, dirname):
