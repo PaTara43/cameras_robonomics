@@ -35,4 +35,5 @@ if __name__ == '__main__':
     config = read_configuration(dirname)
     cam = Camera(config)
     logging.warning("Listening to robonomics")
-    listener(config, cam, dirname)
+    while True:
+        listener(config, cam, dirname)

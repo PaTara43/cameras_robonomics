@@ -23,17 +23,16 @@ def listener(config, cam, dirname):
     logging.warning("Waiting for transaction")
     while True:
         for key, _ in sel.select():
-
-            if key.fileobj is process_read.stderr:
-                logging.warning("Error in listener occurred, rebooting listener")
-                    process_read.kill()
-                    time.sleep(2)
-                    process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    continue
-
             data = key.fileobj.read1(512).decode()
+            if not data:
+                return False
 
-            if (">> " + config['camera']['address'] + " : true") in data:
+            elif key.fileobj is process_read.stderr:
+                logging.warning("Error in listener occurred, rebooting listener")
+                process_read.kill()
+                continue
+
+            elif (">> " + config['camera']['address'] + " : true") in data:
                 logging.warning('Transaction to start recording')
                 if cam.is_busy:
                     logging.warning("Camera is busy. Record aborted")
@@ -45,7 +44,7 @@ def listener(config, cam, dirname):
                 create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
                 create_url_r_thread.start()
 
-            elif (">> " + config['camera']['address'] + " : true") in data:
+            elif (">> " + config['camera']['address'] + " : false") in data:
                 logging.warning('Transaction to stop recording')
                 if not cam.is_busy:
                     logging.warning("Camera is not recording. Nothing to stop")
