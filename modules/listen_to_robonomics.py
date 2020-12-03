@@ -1,5 +1,6 @@
 import logging
 import qrcode
+import selectors
 import subprocess
 import time
 
@@ -15,21 +16,24 @@ def listener(config, cam, dirname):
     program_read = config['transaction']['path_to_robonomics_file'] + " io read launch --remote " + config['transaction']['remote']
     process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    # bug_catcher = Thread(target=catch_bugs, args=(config, cam, process_read, dirname,))
-    # bug_catcher.start()
+    sel = selectors.DefaultSelector()
+    sel.register(process_read.stdout, selectors.EVENT_READ)
+    sel.register(process_read.stderr, selectors.EVENT_READ)
 
     logging.warning("Waiting for transaction")
     while True:
-        error = process_read.stderr.readline()
-        if error:
-            logging.warning("Error in listener occurred, rebooting listener")
-            process_read.kill()
-            time.sleep(2)
-            process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            continue
-        output = process_read.stdout.readline()
-        if output:
-            if (">> " + config['camera']['address'] + " : true") in output.strip().decode('utf-8'):
+        for key, _ in sel.select():
+
+            if key.fileobj is process_read.stderr:
+                logging.warning("Error in listener occurred, rebooting listener")
+                    process_read.kill()
+                    time.sleep(2)
+                    process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                    continue
+
+            data = key.fileobj.read1(512).decode()
+
+            if (">> " + config['camera']['address'] + " : true") in data:
                 logging.warning('Transaction to start recording')
                 if cam.is_busy:
                     logging.warning("Camera is busy. Record aborted")
@@ -40,7 +44,8 @@ def listener(config, cam, dirname):
                 start_record_cam_thread.start()
                 create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
                 create_url_r_thread.start()
-            elif ('>> ' + config['camera']['address'] + " : false") in output.strip().decode('utf-8'):
+
+            elif (">> " + config['camera']['address'] + " : true") in data:
                 logging.warning('Transaction to stop recording')
                 if not cam.is_busy:
                     logging.warning("Camera is not recording. Nothing to stop")
@@ -51,7 +56,6 @@ def listener(config, cam, dirname):
                 stop_record_cam_thread.start()
 
 
-
 def start_record_cam(cam):
     cam.record()
 
@@ -59,15 +63,6 @@ def start_record_cam(cam):
 def stop_record_cam(filename, keyword, qrpic, config):
     time.sleep(1)
     send(filename, keyword, qrpic, config)
-
-
-# def catch_bugs(config, cam, process_read, dirname):
-#     error = process_read.stderr.readline()
-#     if error:
-#         logging.warning("Error in listener occurred, rebooting listener")
-#         process_read.kill()
-#         time.sleep(2)
-#         listener(config, cam, dirname)
 
 
 def create_url_r(cam, dirname):
