@@ -4,7 +4,7 @@
 
 ### Record video, store it in IPFS and send hash to blockchain. Optionally print sticky label with qr-code link to pinned video
 
-Option for sending transactions - [this repo](https://github.com/PaTara43/robonomics_transaction_by_button_rpi4), ('panda' branch for this case).
+Option for sending transactions - [this repo](https://github.com/PaTara43/robonomics_transaction_by_button_rpi4) ('panda' branch for this case).
 
 **Used hardware**
 - [LattePanda](https://www.lattepanda.com/products/2.html) 2/32 GB with **Ubuntu 18.04** installed;
@@ -17,8 +17,7 @@ Option for sending transactions - [this repo](https://github.com/PaTara43/robono
 - [Pinata](https://pinata.cloud/) as a pinning service to widely spread video over IPFS;
 - [YOURLS](https://yourls.org/) to print qr-codes with short predefined links.
 
-**Used software**
-*This is to be installed on LattePanda, connection to which may be established by [yggdrasil](https://yggdrasil-network.github.io/) + [ssh](https://phoenixnap.com/kb/ssh-to-connect-to-remote-server-linux-or-windows)*
+**Used software.** *This is to be installed on LattePanda, connection to which may be established by [yggdrasil](https://yggdrasil-network.github.io/) + [ssh](https://phoenixnap.com/kb/ssh-to-connect-to-remote-server-linux-or-windows)*
 
 - [Python 3](https://docs.python-guide.org/starting/install3/linux/);
 - Robonomics binary file (download latest release [here](https://github.com/airalab/robonomics/releases));
