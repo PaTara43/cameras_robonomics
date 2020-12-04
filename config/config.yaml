@@ -1,22 +1,28 @@
 general:
-  output_dir: "" #ends with a "/"
-  delete_after_record: true
+  output_dir: "" #ends with a "/". This is a directory to temporaly store videos and qr_codes
+  delete_after_record: true #If you don't want to delete files from output folder, change to false.\
+  #Deleteing files from output folder doesn't delete them from IPFS
 transaction:
-  path_to_robonomics_file: "" #where lies the binaty file, ends with a binary filename
-  remote: '' #e.g. ws://127.0.0.1:9944
+  path_to_robonomics_file: "" #where lies the binary file, ends with a binary filename. It's used to listen to network and sending datalogs
+  remote: '' #e.g. '--remote ws://127.0.0.1:9944'. Specify remote web socket to some node.\
+  #If you are to use local network, leave empty
 camera:
-  ip: ''
-  port: ''
-  login: ''
+  ip: '' #Camera static IP
+  port: '' #Camera port
+  login: '' #Camera login
+  password: '' #Camera password
+  address: '' #account address in parachain network
+  key: '' #secret seed (key) in parachain network
+print_qr:
+  enable: true #If you use a printer and want to print a qr code
+  server: '' #visit yourls.org for more info
+  username: ''
   password: ''
-  address: '' #address in parachain network
-  key: '' #secret key in robonomics network
-  framerate: 50 #for recording
 pinata:
-  enable: true
+  enable: true #If you want to send your video to pinning service. You should have an account on pinata.cloud
   pinata_api: ""
   pinata_secret_api: ""
 ipfs:
-  enable: true
+  enable: true #If you want to publish you file to IPFS (basically you want to)
 datalog:
-  enable: true
+  enable: true #If you want to send IPFS hash to blockchain (basically you want to)

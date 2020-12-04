@@ -13,7 +13,7 @@ from threading import Thread
 
 def listener(config, cam, dirname):
 
-    program_read = config['transaction']['path_to_robonomics_file'] + " io read launch --remote " + config['transaction']['remote']
+    program_read = config['transaction']['path_to_robonomics_file'] + " io read launch " + config['transaction']['remote']
     process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     sel = selectors.DefaultSelector()
@@ -42,8 +42,9 @@ def listener(config, cam, dirname):
                 cam.stop_record = False
                 start_record_cam_thread = Thread(target=start_record_cam, args=(cam,))
                 start_record_cam_thread.start()
-                create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
-                create_url_r_thread.start()
+                if config['print_qr']['enable']:
+                    create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
+                    create_url_r_thread.start()
 
             elif (">> " + config['camera']['address'] + " : false") in data:
                 logging.warning('Transaction to stop recording')

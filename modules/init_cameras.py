@@ -12,7 +12,6 @@ class Camera():
         self.login = config['camera']['login']
         self.password = config['camera']['password']
         self.camera_address = config['camera']['address']
-        self.framerate = config['camera']['framerate']
         self.output_dir = config['general']['output_dir']
 
         self.is_busy = False
