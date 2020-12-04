@@ -43,7 +43,7 @@ def listener(config, cam, dirname):
                 start_record_cam_thread = Thread(target=start_record_cam, args=(cam,))
                 start_record_cam_thread.start()
                 if config['print_qr']['enable']:
-                    create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
+                    create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname, config,))
                     create_url_r_thread.start()
 
             elif (">> " + config['camera']['address'] + " : false") in data:
@@ -66,8 +66,8 @@ def stop_record_cam(filename, keyword, qrpic, config):
     send(filename, keyword, qrpic, config)
 
 
-def create_url_r(cam, dirname):
-    cam.keyword, cam.link = create_url()
+def create_url_r(cam, dirname, config):
+    cam.keyword, cam.link = create_url(config)
     logging.warning(cam.link)
 
     robonomics = Image.open(dirname + '/modules/robonomics.jpg').resize((100,100))

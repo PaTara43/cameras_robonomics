@@ -21,7 +21,7 @@ def send(filename, keyword, qrpic, config):
             if hash:
                 try:
                     logging.warning("Updating URL")
-                    update_url(keyword, hash)
+                    update_url(keyword, hash, config)
                 except Exception as e:
                     logging.error("Error while updating URL, error: ", e)
         except Exception as e:

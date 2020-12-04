@@ -3,7 +3,7 @@ import logging
 import requests
 
 
-def create_url():
+def create_url(config):
 
     url = "https://" + config['print_qr']['server'] + "/yourls-api.php"
     querystring = {"username":config['print_qr']['username'],"password":config['print_qr']['password'],\
@@ -16,7 +16,7 @@ def create_url():
     link = config['print_qr']['server'] + "/"+keyword
     return keyword, link
 
-def update_url(keyword, hash):
+def update_url(keyword, hash, config):
 
     url = "https://" + config['print_qr']['server'] + "/yourls-api.php"
     querystring = {"username":config['print_qr']['username'],"password":config['print_qr']['password'],\
