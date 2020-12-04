@@ -68,10 +68,10 @@ python3 main.py
 
 4) Now you can send a transaction triggering the camera to start recording. To do so, you should use the Robonomics IO `write` subcommand of robonomics binary file:
 ```bash
-echo "ON" | ./robonomics io write launch -r <CAMERA_ADDRESS> -s <CONTROL’S_KEY>
+echo "ON" | ./robonomics io write launch -r <CAMERA_ADDRESS> -s <CONTROL’S_KEY> --remote <remote ws>
 ```
 ```bash
-echo "OFF" | ./robonomics io write launch -r <CAMERA_ADDRESS> -s <CONTROL’S_KEY>
+echo "OFF" | ./robonomics io write launch -r <CAMERA_ADDRESS> -s <CONTROL’S_KEY> --remote <remote ws>
 ```
 or you may use button.
 
