@@ -18,25 +18,21 @@ def send(filename, keyword, qrpic, config):
             res = client.add(filename)
             hash = res['Hash']
             logging.warning('Published to IPFS, hash: ' + hash)
+            if hash:
+                try:
+                    logging.warning("Updating URL")
+                    update_url(keyword, hash)
+                except Exception as e:
+                    logging.error("Error while updating URL, error: ", e)
         except Exception as e:
             logging.error("Error while publishing to IPFS, error: ", e)
-
 
     if config['pinata']['enable']:
         try:
             logging.warning("Camera is sending file to pinata")
             hash_pinata = _pin_to_pinata(filename, config)
-            # logging.warning("Camera is pinning hash to pinata")
-            # hash_pinata = _pin_to_pinata(hash, config)
         except Exception as e:
             logging.error("Error while pinning to pinata, error: ", e)
-
-    if hash:
-        try:
-            logging.warning("Updating URL")
-            update_url(keyword, hash)
-        except Exception as e:
-            logging.error("Error while updating URL, error: ", e)
 
     if config['general']['delete_after_record']:
         try:
@@ -56,15 +52,6 @@ def send(filename, keyword, qrpic, config):
         except Exception as e:
             logging.error("Error while sending IPFS hash to chain, error: ", e)
 
-
-# def _pin_to_pinata(hash, config):
-#     pinata_api = config["pinata"]["pinata_api"]
-#     pinata_secret_api = config["pinata"]["pinata_secret_api"]
-#     if pinata_api and pinata_secret_api:
-#         pinata = PinataPy(pinata_api, pinata_secret_api)
-#         pinata.add_hash_to_pin_queue(hash)
-#         logging.warning("Hash added to pin queue")
-#         return pinata.pin_list()['rows'][0]['ipfs_pin_hash']
 
 def _pin_to_pinata(filename, config):
     pinata_api = config["pinata"]["pinata_api"]

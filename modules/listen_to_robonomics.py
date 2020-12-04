@@ -30,6 +30,7 @@ def listener(config, cam, dirname):
             elif key.fileobj is process_read.stderr:
                 logging.warning("Error in listener occurred, rebooting listener")
                 process_read.kill()
+                time.sleep(2)
                 continue
 
             elif (">> " + config['camera']['address'] + " : true") in data:
