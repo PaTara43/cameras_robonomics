@@ -1,5 +1,6 @@
 import logging
 import qrcode
+import selectors
 import subprocess
 import time
 
@@ -12,55 +13,57 @@ from threading import Thread
 
 def listener(config, cam, dirname):
 
-    program_read = config['transaction']['path_to_robonomics_file'] + " io read launch --remote " + config['transaction']['remote']
+    program_read = config['transaction']['path_to_robonomics_file'] + " io read launch " + config['transaction']['remote']
     process_read = subprocess.Popen("exec " + program_read, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    bug_catcher = Thread(target=catch_bugs, args=(config, cam, process_read, dirname,))
-    bug_catcher.start()
+    sel = selectors.DefaultSelector()
+    sel.register(process_read.stdout, selectors.EVENT_READ)
+    sel.register(process_read.stderr, selectors.EVENT_READ)
 
     logging.warning("Waiting for transaction")
     while True:
-        output = process_read.stdout.readline()
-        if output:
-            if (">> " + config['camera']['address'] + " : true") in output.strip().decode('utf-8'):
+        for key, _ in sel.select():
+            data = key.fileobj.read1(512).decode()
+            if not data:
+                return False
+
+            elif key.fileobj is process_read.stderr:
+                logging.warning("Error in listener occurred, rebooting listener")
+                process_read.kill()
+                time.sleep(2)
+                continue
+
+            elif (">> " + config['camera']['address'] + " : true") in data:
                 logging.warning('Transaction to start recording')
+                if cam.is_busy:
+                    logging.warning("Camera is busy. Record aborted")
+                    continue
+                cam.is_busy = True
+                cam.stop_record = False
                 start_record_cam_thread = Thread(target=start_record_cam, args=(cam,))
                 start_record_cam_thread.start()
-                create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
-                create_url_r_thread.start()
-            elif ('>> ' + config['camera']['address'] + " : false") in output.strip().decode('utf-8'):
+                if config['print_qr']['enable']:
+                    create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname,))
+                    create_url_r_thread.start()
+
+            elif (">> " + config['camera']['address'] + " : false") in data:
                 logging.warning('Transaction to stop recording')
-                stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam,config,))
+                if not cam.is_busy:
+                    logging.warning("Camera is not recording. Nothing to stop")
+                    continue
+                cam.stop_record = True
+                cam.is_busy = False
+                stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config,))
                 stop_record_cam_thread.start()
 
 
-
 def start_record_cam(cam):
-    if cam.is_busy:
-        logging.warning("Camera is busy. Record aborted")
-        return False
-    cam.is_busy = True
-    cam.stop_record = False
     cam.record()
 
 
-def stop_record_cam(cam, config):
-    if not cam.is_busy:
-        logging.warning("Camera is not recording yet. Nothing to stop")
-        return False
-    cam.stop_record = True
+def stop_record_cam(filename, keyword, qrpic, config):
     time.sleep(1)
-    send(cam, config)
-    cam.is_busy = False
-
-
-def catch_bugs(config, cam, process_read, dirname):
-    error = process_read.stderr.readline()
-    if error:
-        logging.warning("Error in listener occurred, rebooting listener")
-        process_read.kill()
-        time.sleep(2)
-        listener(config, cam, dirname)
+    send(filename, keyword, qrpic, config)
 
 
 def create_url_r(cam, dirname):
@@ -76,7 +79,7 @@ def create_url_r(cam, dirname):
     pos = ((img_qr_big.size[0] - robonomics.size[0]) // 2, (img_qr_big.size[1] - robonomics.size[1]) // 2)
 
     img_qr_big.paste(robonomics, pos)
-    cam.qrpic = cam.output_dir + 'qr.png'
+    cam.qrpic = cam.output_dir + time.ctime(time.time()).replace(" ", "_") + 'qr.png'
     img_qr_big.save(cam.qrpic)
     printer = Task()
     printer.send_task_to_printer(cam.qrpic)

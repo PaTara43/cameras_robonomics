@@ -5,20 +5,22 @@ import requests
 
 def create_url():
 
-    url = "https://url.today/yourls-api.php"
-    querystring = {"username":"vadim.manaenko","password":"W&t88e54dzLrC5f","action":"shorturl","format":"json","url":"http://gateway.ipfs.io"}
+    url = "https://" + config['print_qr']['server'] + "/yourls-api.php"
+    querystring = {"username":config['print_qr']['username'],"password":config['print_qr']['password'],\
+    "action":"shorturl","format":"json","url":"http://gateway.ipfs.io"}
     payload = ""
     response = requests.request("GET", url, data=payload, params=querystring)
 
     logging.debug(response.text)
     keyword = ast.literal_eval(response._content.decode('utf-8'))['url']['keyword']
-    link = "url.today/"+keyword
+    link = config['print_qr']['server'] + "/"+keyword
     return keyword, link
 
 def update_url(keyword, hash):
 
-    url = "https://url.today/yourls-api.php"
-    querystring = {"username":"vadim.manaenko","password":"W&t88e54dzLrC5f","action":"update","format":"json","url":"http://gateway.ipfs.io/ipfs/"+hash,"shorturl":keyword}
+    url = "https://" + config['print_qr']['server'] + "/yourls-api.php"
+    querystring = {"username":config['print_qr']['username'],"password":config['print_qr']['password'],\
+    "action":"update","format":"json","url":"http://gateway.ipfs.io/ipfs/"+hash,"shorturl":keyword}
     payload = ""
     response = requests.request("GET", url, data=payload, params=querystring)
 
