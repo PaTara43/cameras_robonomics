@@ -77,3 +77,24 @@ or you may use button.
 
 ## How it works
 Once camera receives "ON" transaction, it creates a short URL redirecting to nowhere (IPFS gateway with no hash), creates a qr-code with this short URL, prints the qr and starts filming. Once "OFF" transaction is received, it stops filming, publishes video to IPFS, changes short URL redirection link to gateway with hash address of the video and sends the video to Pinata pinning service for wider spreading over IPFS. IPFS hash of the video will be available on Robonomics platform Chainstate->datalog->CAMERA and stored there securely.
+
+## Auto-start
+You may want to auto-restart this script. To be able so, edit service file
+```bash
+nano services/robonomics_cameras.service
+```
+and fill it with path to python3 and the script. Don't forget to fill in username. E.g.:
+```
+ExecStart=/usr/bin/python3 /home/ubuntu/cameras_robonomics/main.py
+User=ubuntu
+```
+Then move it to `/etc/systemd/system/` and run:
+```bash
+sudo mv services/robonomics_cameras.service /etc/systemd/system/
+systemctl enable robonomics_cameras
+systemctl start robonomics_cameras
+```
+To check service status do:
+```bash
+systemctl -l status robonomics_cameras
+```
