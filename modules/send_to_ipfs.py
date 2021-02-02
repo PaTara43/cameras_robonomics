@@ -9,7 +9,27 @@ from pinatapy import PinataPy
 from modules.url_generator import update_url
 
 
-def send(filename, keyword, qrpic, config):
+def send(filename, keyword, qrpic, config, dirname):
+
+    if config['intro']['enable']:
+        try:
+            concat_string = "file \'" + dirname + "/media/intro.mp4\'\nfile \'" + filename + "\'"
+            ###
+            #intro shoudl be modified with
+
+            #ffmpeg -i <VIDEONAME>.mp4 -map 0:? -ac 2 -c:a aac -ar 48000 -vf
+            #format=yuv420p,scale=1280x720,yadif  -video_track_timescale 90000 -c:v libx264 intro.mp4
+
+            with open("vidlist.txt", "w") as text_file:
+                text_file.write(concat_string)
+            text_file.close()
+            concat_filename = filename[:-4] + '_intro' + filename[-4:]
+            concat_command = "ffmpeg -f concat -safe 0 -i vidlist.txt -c copy" + concat_filename
+            concat_process = subprocess.Popen("exec " + concat_command,\
+            shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+
+        except Exception as e:
+            logging.error("Error while concatenating videos: ", e)
 
     if config['ipfs']['enable']:
         try:
@@ -39,6 +59,8 @@ def send(filename, keyword, qrpic, config):
             logging.warning('Removing file')
             os.remove(filename)
             os.remove(qrpic)
+            if config['intro']['enable']:
+                os.remove(concat_filename)
         except Exception as e:
             logging.error("Error while deleteng file, error: ", e)
 

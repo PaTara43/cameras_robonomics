@@ -1,5 +1,4 @@
 general:
-  output_dir: "" #ends with a "/". This is a directory to temporaly store videos and qr_codes
   delete_after_record: true #If you don't want to delete files from output folder, change to false.\
   #Deleteing files from output folder doesn't delete them from IPFS
 transaction:
@@ -18,6 +17,8 @@ print_qr:
   server: '' #visit yourls.org for more info
   username: ''
   password: ''
+intro:
+  enable: true #If you want to attach an intro video to the main vid. Intro should be placed in media/intro.mp4
 pinata:
   enable: true #If you want to send your video to pinning service. You should have an account on pinata.cloud
   pinata_api: ""

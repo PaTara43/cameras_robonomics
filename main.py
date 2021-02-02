@@ -33,7 +33,7 @@ class Error(Exception):
 if __name__ == '__main__':
     dirname = os.path.dirname(os.path.abspath(__file__))
     config = read_configuration(dirname)
-    cam = Camera(config)
+    cam = Camera(config, dirname)
     logging.warning("Listening to robonomics")
     while True:
         listener(config, cam, dirname)

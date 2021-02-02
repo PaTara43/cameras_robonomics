@@ -5,24 +5,23 @@ import subprocess
 class Camera():
 
 
-    def __init__(self, config):
+    def __init__(self, config, dirname):
 
         self.ip = config['camera']['ip']
         self.port = config['camera']['port']
         self.login = config['camera']['login']
         self.password = config['camera']['password']
         self.camera_address = config['camera']['address']
-        self.output_dir = config['general']['output_dir']
 
         self.is_busy = False
         self.stop_stream = False
         self.stop_record = False
 
-    def record(self):
+    def record(self, dirname):
 
-        self.filename = self.output_dir + time.ctime(time.time()).replace(" ", "_") + '.mp4'
+        self.filename = dirname + "/output/" + time.ctime(time.time()).replace(" ", "_") + '.mp4'
         self.program_ffmpeg= 'ffmpeg -loglevel debug -rtsp_transport tcp -i "rtsp://' + self.login + ':' + self.password + '@' + self.ip \
-            + ':' + self.port + '/Streaming/Channels/101" -c copy -map 0 ' + self.filename
+            + ':' + self.port + '/Streaming/Channels/101" -video_track_timescale 90000 -c copy -map 0 ' + self.filename
         self.process_ffmpeg = subprocess.Popen("exec " + self.program_ffmpeg, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
         logging.warning("Started recording image")
         while not self.stop_record:
