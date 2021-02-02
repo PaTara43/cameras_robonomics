@@ -17,8 +17,6 @@ def read_configuration(dirname) -> dict:
             content = f.read()
             config = yaml.load(content, Loader=yaml.FullLoader)
             logging.debug(f"Configuration dict: {content}")
-            if not os.path.exists(config['general']['output_dir']):
-                raise Error("Output folder " + config['general']['output_dir'] + " doesn't exist! Create it or edit config file.")
             return config
     except Exception as e:
         while True:

@@ -27,7 +27,7 @@ def listener(config, cam, dirname):
             if not data:
                 return False
 
-            elif ("Low open file descriptor limit configured for the process")
+            elif ("Low open file descriptor limit configured for the process") in data:
                 pass
 
             elif key.fileobj is process_read.stderr:
@@ -43,7 +43,7 @@ def listener(config, cam, dirname):
                     continue
                 cam.is_busy = True
                 cam.stop_record = False
-                start_record_cam_thread = Thread(target=start_record_cam, args=(cam, dirname))
+                start_record_cam_thread = Thread(target=start_record_cam, args=(cam, dirname,))
                 start_record_cam_thread.start()
                 if config['print_qr']['enable']:
                     create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname, config,))
@@ -56,7 +56,7 @@ def listener(config, cam, dirname):
                     continue
                 cam.stop_record = True
                 cam.is_busy = False
-                stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config, dirname))
+                stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config, dirname,))
                 stop_record_cam_thread.start()
 
 
@@ -66,7 +66,7 @@ def start_record_cam(cam, dirname):
 
 def stop_record_cam(filename, keyword, qrpic, config, dirname):
     time.sleep(1)
-    send(filename, keyword, qrpic, config dirname)
+    send(filename, keyword, qrpic, config, dirname)
 
 
 def create_url_r(cam, dirname, config):
