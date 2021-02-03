@@ -1,4 +1,4 @@
 modules/__pycache__
 __pycache__
 config/config_pi.yaml
-output/*
+media/intro.mp4

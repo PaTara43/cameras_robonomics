@@ -20,8 +20,8 @@ class Camera():
     def record(self, dirname):
 
         self.filename = dirname + "/output/" + time.ctime(time.time()).replace(" ", "_") + '.mp4'
-        self.program_ffmpeg= 'ffmpeg -loglevel debug -rtsp_transport tcp -i "rtsp://' + self.login + ':' + self.password + '@' + self.ip \
-            + ':' + self.port + '/Streaming/Channels/101" -video_track_timescale 90000 -c copy -map 0 ' + self.filename
+        self.program_ffmpeg= 'ffmpeg -rtsp_transport tcp -i "rtsp://' + self.login + ':' + self.password + '@' + self.ip \
+            + ':' + self.port + '/Streaming/Channels/101" -r 25 -map 0 ' + self.filename
         self.process_ffmpeg = subprocess.Popen("exec " + self.program_ffmpeg, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
         logging.warning("Started recording image")
         while not self.stop_record:

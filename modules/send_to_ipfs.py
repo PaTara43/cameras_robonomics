@@ -13,12 +13,11 @@ def send(filename, keyword, qrpic, config, dirname):
 
     if config['intro']['enable']:
         try:
+            if not os.path.exists(dirname + "/media/intro.mp4"):
+                raise Error("Intro file doesn't exist!")
             concat_string = "file \'" + dirname + "/media/intro.mp4\'\nfile \'" + filename + "\'"
             ###
-            #intro shoudl be modified with
-
-            #ffmpeg -i <VIDEONAME>.mp4 -map 0:? -ac 2 -c:a aac -ar 48000 -vf
-            #format=yuv420p,scale=1280x720,yadif  -video_track_timescale 90000 -c:v libx264 intro.mp4
+            #intro shoudl be modified to have the same codec, tbr, tbc, tbn, fps as cam video
 
             with open("vidlist.txt", "w") as text_file:
                 text_file.write(concat_string)
