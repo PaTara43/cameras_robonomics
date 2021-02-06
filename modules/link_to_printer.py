@@ -1,20 +1,22 @@
-import cups
+from brother_ql import BrotherQLRaster, conversion
+from brother_ql.backends.helpers import send
+from PIL import Image
 import logging
 import time
 
 class Task():
 
-    def __init__(self):
+    def __init__(self, picname):
         logging.warning("Initializing printer")
-        self.conn = cups.Connection()
-        self.printers = self.conn.getPrinters()
-        self.printer_name =list(self.printers.keys())[0]
 
-    def send_task_to_printer(self, picname):
+        qr = Image.open(picname)
+
+        PRINTER = 'usb://0x04f9:0x209b'
+        LABEL_NAME = '62'
+        DPI_600 = False
+
         logging.warning("Printing...")
-        self.print_id = self.conn.printFile(self.printer_name, picname, "QR-code",{'PaperType':'LabelGaps',\
-        'GapsHeight':'2', 'collate':'true', 'media':'Custom.39x39mm'})
-        # Wait until the job finishes
-        while self.conn.getJobs().get(self.print_id, None):
-            time.sleep(1)
+        qlr = BrotherQLRaster('QL-800')
+        conversion.convert(qlr, [qr], LABEL_NAME, red=True)
+        send(qlr.data, PRINTER)
         logging.warning("Printed!")
