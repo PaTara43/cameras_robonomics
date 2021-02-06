@@ -13,6 +13,7 @@ def send(filename, keyword, qrpic, config, dirname):
 
     if config['intro']['enable']:
         try:
+            logging.warning("Concatenating videos")
             if not os.path.exists(dirname + "/media/intro.mp4"):
                 raise Error("Intro file doesn't exist!")
             concat_string = "file \'" + dirname + "/media/intro.mp4\'\nfile \'" + filename + "\'"
@@ -34,7 +35,10 @@ def send(filename, keyword, qrpic, config, dirname):
         try:
             logging.warning("Camera is publishing file to IPFS")
             client = ipfshttpclient.connect()
-            res = client.add(concat_filename)
+            if config['intro']['enable']:
+                res = client.add(concat_filename)
+            else:
+                res = client.add(filename)
             hash = res['Hash']
             logging.warning('Published to IPFS, hash: ' + hash)
             if hash:
@@ -49,7 +53,12 @@ def send(filename, keyword, qrpic, config, dirname):
     if config['pinata']['enable']:
         try:
             logging.warning("Camera is sending file to pinata")
-            hash_pinata = _pin_to_pinata(concat_filename, config)
+
+            if config['intro']['enable']:
+                hash_pinata = _pin_to_pinata(concat_filename, config)
+            else:
+                hash_pinata = _pin_to_pinata(filename, config)
+
         except Exception as e:
             logging.error("Error while pinning to pinata, error: ", e)
 

@@ -7,7 +7,7 @@ import time
 from modules.link_to_printer import Task
 from modules.send_to_ipfs import send
 from modules.url_generator import create_url
-from PIL import Image
+from PIL import Image, ImageOps
 from threading import Thread
 
 
@@ -91,5 +91,4 @@ def create_url_r(cam, dirname, config):
     img_qr_big = img_qr_big.crop((left, top, right, bottom))
     cam.qrpic = dirname + "/output/" + time.ctime(time.time()).replace(" ", "_") + 'qr.png'
     img_qr_big.save(cam.qrpic)
-    printer = Task()
-    printer.send_task_to_printer(cam.qrpic)
+    printer = Task(cam.qrpic)
