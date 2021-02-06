@@ -27,16 +27,18 @@ sudo apt install ffmpeg
 ```
 - [IPFS](https://ipfs.io/):
 ```bash
-wget https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_linux-arm.tar.gz
+wget https://dist.ipfs.io/go-ipfs/v0.6.0/go-ipfs_v0.6.0_linux-386.tar.gz
 tar -xvf go-ipfs_v0.6.0_linux-arm.tar.gz
 rm go-ipfs_v0.6.0_linux-amd64.tar.gz go-ipfs_v0.6.0_linux-arm.tar.gz
 sudo ./go-ipfs/install.sh
 rm -rf go-ipfs
 ```
+Make sure to auto-run it on reboot
 - [CUPS](https://www.cups.org/):
 ```bash
 sudo apt install cups python3-cups
 ```
+Make sure to auto-run it on reboot as well
 
 ## Preparations
 1) Install Ubuntu 18.04 on LattePanda;
@@ -53,7 +55,7 @@ sudo apt install cups python3-cups
 ```bash
 git clone https://github.com/PaTara43/cameras_robonomics
 cd cameras_robonomics
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 2) Specify all the information in configuration file.
 ```bash
@@ -79,7 +81,7 @@ or you may use button.
 Once camera receives "ON" transaction, it creates a short URL redirecting to nowhere (IPFS gateway with no hash), creates a qr-code with this short URL, prints the qr and starts filming. Once "OFF" transaction is received, it stops filming, publishes video to IPFS, changes short URL redirection link to gateway with hash address of the video and sends the video to Pinata pinning service for wider spreading over IPFS. IPFS hash of the video will be available on Robonomics platform Chainstate->datalog->CAMERA and stored there securely.
 
 ## Auto-start
-You may want to auto-restart this script. To be able so, edit service file
+You may want to auto-restart this script. To be able so, edit service file in repository.
 ```bash
 nano services/robonomics_cameras.service
 ```
