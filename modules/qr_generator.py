@@ -13,7 +13,7 @@ def create_qr(dirname, link):
 
     pos = ((img_qr_big.size[0] - robonomics.size[0]) // 2, (img_qr_big.size[1] - robonomics.size[1]) // 2)
 
-    qr_s = 300
+    qr_s = 200
     border_s = int((696 - qr_s)/2)
     img_qr_big.paste(robonomics, pos)
     img_qr_big = img_qr_big.resize((qr_s, qr_s))

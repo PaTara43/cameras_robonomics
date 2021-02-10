@@ -1,8 +1,10 @@
+import logging
+import time
+
 from brother_ql import BrotherQLRaster, conversion
 from brother_ql.backends.helpers import send
 from PIL import Image
-import logging
-import time
+
 
 class Task():
 
