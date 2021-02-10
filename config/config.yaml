@@ -14,6 +14,7 @@ camera:
   key: '' #secret seed (key) in parachain network
 print_qr:
   enable: true #If you use a printer and want to print a qr code
+yourls:
   server: '' #visit yourls.org for more info
   username: ''
   password: ''
