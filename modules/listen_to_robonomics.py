@@ -54,14 +54,9 @@ def listener(config, cam, dirname):
                     continue
                 cam.stop_record = True
                 cam.is_busy = False
-                try:
-                    stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config, dirname,))
-                    stop_record_cam_thread.start()
-                except Exception as e:
-                    cam.process_ffmpeg.communicate(input = b'q')[0]
-                    logging.warning("Stoped recording image at Exception")
-                    time.sleep(1)
-                    self.process_ffmpeg.kill()
+
+                stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config, dirname,))
+                stop_record_cam_thread.start()
 
 def start_record_cam(cam, dirname):
     cam.record(dirname)
