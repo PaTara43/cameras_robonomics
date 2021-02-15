@@ -1,9 +1,12 @@
+import glob
 import ipfshttpclient
 import json
 import logging
 import os
 import requests
 import subprocess
+import time
+
 
 from pinatapy import PinataPy
 from modules.url_generator import update_url
@@ -20,17 +23,22 @@ def send(filename, keyword, qrpic, config, dirname):
             ###
             #intro shoudl be modified to have the same codec, tbr, tbc, tbn, fps as cam video
 
-            with open("vidlist.txt", "w") as text_file:
+            with open(dirname + "/output/vidlist.txt", "w") as text_file:
                 text_file.write(concat_string)
+            #message = input('textfile')
             text_file.close()
             concat_filename = filename[:-4] + '_intro' + filename[-4:]
-            concat_command = "ffmpeg -f concat -safe 0 -i vidlist.txt -c copy" + concat_filename
+            concat_command = "ffmpeg -f concat -safe 0 -i " + dirname + "/output/vidlist.txt -c copy " + concat_filename
+            #print("concat command " + concat_command)
             concat_process = subprocess.Popen("exec " + concat_command,\
             shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+            res = concat_process.stdout.readline()
+
+            #message = input('Concatenating..?')
 
         except Exception as e:
             logging.error("Error while concatenating videos: ", e)
-
+    #abc = input('check for file')
     if config['ipfs']['enable']:
         try:
             logging.warning("Camera is publishing file to IPFS")
@@ -64,11 +72,10 @@ def send(filename, keyword, qrpic, config, dirname):
 
     if config['general']['delete_after_record']:
         try:
-            logging.warning('Removing file')
-            os.remove(filename)
-            os.remove(qrpic)
-            if config['intro']['enable']:
-                os.remove(concat_filename)
+            logging.warning('Removing files')
+            files = glob.glob(dirname + '/output/*')
+            for f in files:
+                os.remove(f)
         except Exception as e:
             logging.error("Error while deleteng file, error: ", e)
 

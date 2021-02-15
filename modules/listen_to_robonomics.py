@@ -1,5 +1,6 @@
 import logging
 import selectors
+import sys
 import subprocess
 import time
 
@@ -60,12 +61,12 @@ def listener(config, cam, dirname):
 
 def start_record_cam(cam, dirname):
     cam.record(dirname)
-
+    sys.exit()
 
 def stop_record_cam(filename, keyword, qrpic, config, dirname):
     time.sleep(1)
     send(filename, keyword, qrpic, config, dirname)
-
+    sys.exit()
 
 def create_url_r(cam, dirname, config):
     cam.keyword, cam.link = create_url(config)
