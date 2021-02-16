@@ -33,9 +33,13 @@ rm go-ipfs_v0.6.0_linux-amd64.tar.gz go-ipfs_v0.6.0_linux-arm.tar.gz
 sudo ./go-ipfs/install.sh
 rm -rf go-ipfs
 ```
-
+RPi.GPIO
+```bash
+sudo apt-get -y install python3-rpi.gpio
+sudo usermod -G dialup -a $USER
+```
 ## Preparations
-1) Install Ubuntu 20.04 on RaspberryPi4;
+1) Install [Ubuntu 20.04] on RaspberryPi4;
 2) Install all the software;
 4) Set up IP camera. It should have a static IP to put it in configuration file. HD quality is recommended for less file size. Feel free to adjust OSD info;
 5) Set up YOURLS server;
@@ -48,7 +52,7 @@ rm -rf go-ipfs
 ```bash
 git clone https://github.com/PaTara43/cameras_robonomics
 cd cameras_robonomics
-pip3 install -r requirements.txt
+sudo pip3 install -r requirements.txt
 ```
 2) Specify all the information in configuration file.
 ```bash
