@@ -53,7 +53,7 @@ Make sure to auto-run it on reboot as well
 ## To run:
 1) Download source code and install additional python libraries:
 ```bash
-git clone https://github.com/PaTara43/cameras_robonomics
+git clone --branch lattepanda_xp420b https://github.com/PaTara43/cameras_robonomics
 cd cameras_robonomics
 pip3 install -r requirements.txt
 ```
