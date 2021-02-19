@@ -1,3 +1,4 @@
+import RPi.GPIO as GPIO
 import logging
 import selectors
 import sys
@@ -16,8 +17,13 @@ def listener(channel, config, cam, dirname):
     time.sleep(0.1)
     if not GPIO.input(channel):
         if cam.initial_launch:
-            cam.initial_launch = False
+            logging.warning("Turn tumbler off")
+            return False
+        if cam.is_busy:
+            logging.warning("Camera is busy. Record aborted")
+            return False
         cam.stop_record = False
+        cam.is_busy = True
         start_record_cam_thread = Thread(target=start_record_cam, args=(cam, dirname,))
         start_record_cam_thread.start()
         create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname, config,))
@@ -27,7 +33,11 @@ def listener(channel, config, cam, dirname):
         if cam.initial_launch:
             cam.initial_launch = False
             return False
+        if not cam.is_busy:
+            logging.warning("Camera is not recording. Nothing to stop")
+            return False
         cam.stop_record = True
+        cam.is_busy = False
         stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config, dirname,))
         stop_record_cam_thread.start()
 

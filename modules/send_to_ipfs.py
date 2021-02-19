@@ -73,9 +73,10 @@ def send(filename, keyword, qrpic, config, dirname):
     if config['general']['delete_after_record']:
         try:
             logging.warning('Removing files')
-            files = glob.glob(dirname + '/output/*')
-            for f in files:
-                os.remove(f)
+            os.remove(filename)
+            os.remove(qrpic)
+            if config['intro']['enable']:
+                os.remove(concat_filename)
         except Exception as e:
             logging.error("Error while deleteng file, error: ", e)
 
