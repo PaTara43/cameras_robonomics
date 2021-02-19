@@ -13,7 +13,11 @@ camera:
   key: '' #secret seed (key) in parachain network
 print_qr:
   enable: true #If you use a printer and want to print a qr code
+<<<<<<< HEAD
   logos: true #if you want logos on left and right sides of a qr. Should be square pics. By default there is an example
+=======
+  logos: true
+>>>>>>> a2cda702ccdeb5ed061002f228ccefe2f827394d
 yourls:
   server: '' #visit yourls.org for more info
   username: ''
