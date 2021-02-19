@@ -15,6 +15,8 @@ def listener(channel, config, cam, dirname):
 
     time.sleep(0.1)
     if not GPIO.input(channel):
+        if cam.initial_launch:
+            cam.initial_launch = False
         cam.stop_record = False
         start_record_cam_thread = Thread(target=start_record_cam, args=(cam, dirname,))
         start_record_cam_thread.start()
@@ -22,6 +24,9 @@ def listener(channel, config, cam, dirname):
         create_url_r_thread.start()
 
     else:
+        if cam.initial_launch:
+            cam.initial_launch = False
+            return False
         cam.stop_record = True
         stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config, dirname,))
         stop_record_cam_thread.start()
