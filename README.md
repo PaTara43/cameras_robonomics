@@ -31,12 +31,12 @@ rm go-ipfs_v0.6.0_linux-amd64.tar.gz go-ipfs_v0.6.0_linux-arm.tar.gz
 sudo ./go-ipfs/install.sh
 rm -rf go-ipfs
 ```
--[RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
+- [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
 ```bash
 sudo apt-get -y install python3-rpi.gpio
 sudo usermod -G dialup -a $USER
 ```
--[brother_ql](https://brother-ql.net/) software
+- [brother_ql](https://brother-ql.net/) software
 ```bash
 pip3 install brother_ql
 sudo usermod -G lp -a $USER
