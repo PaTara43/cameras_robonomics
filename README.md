@@ -52,7 +52,7 @@ sudo reboot
 6) Set up a printer. For this case, you can follow [this manual](https://www.rs-online.com/designspark/building-a-pi-powered-wireless-label-printer)
 7) Solder a tumbler to 5V (PIN4), GND(PIN6) and GPIO18 (PIN12) (in this example) pins on Raspberry Pi;
 
-![Raspberry](https://www.bigmessowires.com/wp-content/uploads/2018/05/Raspberry-GPIO.jpg "Raspberry")
+![Raspberry](https://github.com/PaTara43/media/blob/master/Raspberry%20pi%203%20GPIO_pins_v2.png "Raspberry")
 
 8) If you use router, set it up to connect camera to RaspberryPi4 and connect router to the internet;
 
