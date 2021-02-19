@@ -3,7 +3,7 @@ import time
 
 from PIL import Image, ImageOps
 
-def create_qr(dirname, link):
+def create_qr(dirname, link, config):
     inpic_s = 100
     robonomics = Image.open(dirname + '/media/robonomics.jpg').resize((inpic_s,inpic_s))
     qr_big = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
@@ -21,13 +21,14 @@ def create_qr(dirname, link):
     left, top, right, bottom = 0, border_s-2, qr_s+border_s*2, border_s+qr_s+2
     img_qr_big = img_qr_big.crop((left, top, right, bottom))
 
-    left_pic = Image.open(dirname + '/media/left_pic.jpg').resize((qr_s,qr_s))
-    posl = (24, 2)
-    img_qr_big.paste(left_pic, posl)
+    if config['print_qr']['logos']:
+        left_pic = Image.open(dirname + '/media/left_pic.jpg').resize((qr_s,qr_s))
+        posl = (24, 2)
+        img_qr_big.paste(left_pic, posl)
 
-    right_pic = Image.open(dirname + '/media/right_pic.jpg').resize((qr_s,qr_s))
-    posr = (696-qr_s-24, 2)
-    img_qr_big.paste(right_pic, posr)
+        right_pic = Image.open(dirname + '/media/right_pic.jpg').resize((qr_s,qr_s))
+        posr = (696-qr_s-24, 2)
+        img_qr_big.paste(right_pic, posr)
 
     qrpic = dirname + "/output/" + time.ctime(time.time()).replace(" ", "_") + 'qr.png'
     img_qr_big.save(qrpic)

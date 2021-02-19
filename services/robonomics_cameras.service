@@ -1,13 +1,12 @@
 [Unit]
-Description=robonomics_service
-After=network.target
+Description=Robonomics Cameras Service
+After=multi-user.target
 
 [Service]
-Type = simple
-Restart=always
-RestartSec=1
-ExecStart=
-User=
+Type=idle
+ExecStart=/usr/bin/python3 /home/pi/cameras_robonomics/main.py
+WorkingDirectory=/home/pi
+User=pi
 
 [Install]
 WantedBy=multi-user.target
