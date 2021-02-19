@@ -4,14 +4,12 @@
 
 ### Record video, store it in IPFS and send hash to blockchain. Optionally print sticky label with qr-code link to pinned video
 
-Option for sending transactions - [this repo](https://github.com/PaTara43/robonomics_transaction_by_button_rpi4) ('panda' branch for this case).
-
 **Used hardware**
 - [RaspberryPi4](https://www.raspberrypi.org/products/raspberry-pi-4-model-b/) 2 GB with **Ubuntu 20.04** installed;
 - IP camera Hikvision HiWatch DS-I200C + power supply/PoE injector;
 - Label printer [Brother QL-800](https://www.brother.ru/labelling-and-receipts/ql-800);
 - _Optional_: Wi-Fi router [Mikrotik RB941-2nD](https://mikrotik.com/product/RB941-2nD) for scalability (e.g. add more cameras), remote access or stable Wi-Fi connection;
-- _Optional_: Button to send transactions. Generally, GPIO may be used with other hardware.
+- Tumbler for triggering recording. Generally, GPIO may be used with other hardware.
 
 **Used services**
 - [Pinata](https://pinata.cloud/) as a pinning service to widely spread video over IPFS;
@@ -49,10 +47,13 @@ sudo reboot
 ## Preparations
 1) Install [Ubuntu 20.04] on RaspberryPi4;
 2) Install all the software;
-4) Set up IP camera. It should have a static IP to put it in configuration file. HD quality is recommended for less file size. Feel free to adjust OSD info;
+4) Set up IP camera. It should have a static IP to put it in configuration file. HD quality is recommended for less file size. Feel free to adjust OSD info. You may need windows to set it up for Hikvision;
 5) Set up YOURLS server;
 6) Set up a printer. For this case, you can follow [this manual](https://www.rs-online.com/designspark/building-a-pi-powered-wireless-label-printer)
-7) If you use a button, solder it to GPIO board and [set it up for transactions sending](https://github.com/PaTara43/robonomics_transaction_by_button_rpi4);
+7) Solder a tumbler to 5V (PIN4), GND(PIN6) and GPIO18 (PIN12) (in this example) pins on Raspberry Pi;
+
+![Raspberry](https://www.bigmessowires.com/wp-content/uploads/2018/05/Raspberry-GPIO.jpg "Raspberry")
+
 8) If you use router, set it up to connect camera to RaspberryPi4 and connect router to the internet;
 
 ## To run:
@@ -73,17 +74,10 @@ It has comments for better understanding. **Read them carefully.** All the infor
 python3 main.py
 ```
 
-4) Now you can send a transaction triggering the camera to start recording. To do so, you should use the Robonomics IO `write` subcommand of robonomics binary file:
-```bash
-echo "ON" | ./robonomics io write launch -r <CAMERA_ADDRESS> -s <CONTROL’S_KEY> --remote <remote ws>
-```
-```bash
-echo "OFF" | ./robonomics io write launch -r <CAMERA_ADDRESS> -s <CONTROL’S_KEY> --remote <remote ws>
-```
-or you may use button.
+4) Now you can start and stop recording with a tumbler. May need some debugging to find out which position is ON and OFF.
 
 ## How it works
-Once camera receives "ON" transaction, it creates a short URL redirecting to nowhere (IPFS gateway with no hash), creates a qr-code with this short URL, prints the qr and starts filming. Once "OFF" transaction is received, it stops filming, publishes video to IPFS, changes short URL redirection link to gateway with hash address of the video and sends the video to Pinata pinning service for wider spreading over IPFS. IPFS hash of the video will be available on Robonomics platform Chainstate->datalog->CAMERA and stored there securely.
+Tumbler stands into ON, camera creates a short URL redirecting to nowhere (IPFS gateway with no hash), creates a qr-code with this short URL, prints the qr and starts filming. Once tumbler is switched to OFF, camera stops filming, publishes video to IPFS, changes short URL redirection link to gateway with hash address of the video and sends the video to Pinata pinning service for wider spreading over IPFS. IPFS hash of the video will be available on Robonomics platform Chainstate->datalog->CAMERA account and stored there securely.
 
 ## Auto-start
 You may want to auto-restart this script. To be able so, edit service file
