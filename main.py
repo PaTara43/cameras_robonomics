@@ -32,6 +32,11 @@ if __name__ == '__main__':
     dirname = os.path.dirname(os.path.abspath(__file__))
     config = read_configuration(dirname)
     cam = Camera(config, dirname)
-    logging.warning("Listening to robonomics")
-    while True:
-        listener(config, cam, dirname)
+    cam.is_busy = False
+    
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.add_event_detect(18,GPIO.BOTH,callback=listener(config, cam, dirname), bouncetime=1000) # Setup event on pin 12 rising edge
+
+    input("Waiting for button to be pressed") # Run until someone presses enter
+    GPIO.cleanup() # Clean up

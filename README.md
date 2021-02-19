@@ -43,7 +43,7 @@ sudo usermod -G dialup -a $USER
 pip3 install brother_ql
 sudo usermod -G lp -a $USER
 #reboot
-reboot
+sudo reboot
 ```
 
 ## Preparations
