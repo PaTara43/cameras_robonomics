@@ -20,25 +20,16 @@ def send(filename, keyword, qrpic, config, dirname):
             if not os.path.exists(dirname + "/media/intro.mp4"):
                 raise Error("Intro file doesn't exist!")
             concat_string = "file \'" + dirname + "/media/intro.mp4\'\nfile \'" + filename + "\'"
-            ###
-            #intro shoudl be modified to have the same codec, tbr, tbc, tbn, fps as cam video
-
             with open(dirname + "/output/vidlist.txt", "w") as text_file:
                 text_file.write(concat_string)
-            #message = input('textfile')
             text_file.close()
             concat_filename = filename[:-4] + '_intro' + filename[-4:]
             concat_command = "ffmpeg -f concat -safe 0 -i " + dirname + "/output/vidlist.txt -c copy " + concat_filename
-            #print("concat command " + concat_command)
             concat_process = subprocess.Popen("exec " + concat_command,\
             shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
             res = concat_process.stdout.readline()
-
-            #message = input('Concatenating..?')
-
         except Exception as e:
             logging.error("Error while concatenating videos: ", e)
-    #abc = input('check for file')
     if config['ipfs']['enable']:
         try:
             logging.warning("Camera is publishing file to IPFS")

@@ -34,6 +34,7 @@ if __name__ == '__main__':
     config = read_configuration(dirname)
     cam = Camera(config, dirname)
     cam.initial_launch = True
+    cam.is_busy = False
     channel = 18
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_UP)

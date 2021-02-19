@@ -17,8 +17,7 @@ def listener(channel, config, cam, dirname):
     time.sleep(0.1)
     if not GPIO.input(channel):
         if cam.initial_launch:
-            logging.warning("Turn tumbler off")
-            return False
+            cam.initial_launch = False
         if cam.is_busy:
             logging.warning("Camera is busy. Record aborted")
             return False
