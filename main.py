@@ -1,3 +1,4 @@
+import asyncio
 import RPi.GPIO as GPIO
 import logging
 import os
@@ -39,6 +40,8 @@ if __name__ == '__main__':
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_UP)
     GPIO.add_event_detect(channel,GPIO.BOTH,callback=lambda x: listener(channel, config, cam, dirname), bouncetime=1000) # Setup event on pin 12 rising edge
+    loop = asyncio.get_event_loop()
+    loop.run_forever()
+    print("Waiting for button to be pressed") # Run until someone presses enter
 
-    input("Waiting for button to be pressed") # Run until someone presses enter
     GPIO.cleanup() # Clean up

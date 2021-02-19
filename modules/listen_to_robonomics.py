@@ -52,6 +52,6 @@ def stop_record_cam(filename, keyword, qrpic, config, dirname):
 def create_url_r(cam, dirname, config):
     cam.keyword, cam.link = create_url(config)
     logging.warning(cam.link)
-    cam.qrpic = create_qr(dirname, cam.link)
+    cam.qrpic = create_qr(dirname, cam.link, config)
     if config['print_qr']['enable']:
         printer = Task(cam.qrpic)

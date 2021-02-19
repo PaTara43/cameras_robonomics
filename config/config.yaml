@@ -13,12 +13,14 @@ camera:
   key: '' #secret seed (key) in parachain network
 print_qr:
   enable: true #If you use a printer and want to print a qr code
+  logos: true
 yourls:
   server: '' #visit yourls.org for more info
   username: ''
   password: ''
 intro:
-  enable: true #If you want to attach an intro video to the main vid. Intro should be placed in media/intro.mp4
+  enable: true #If you want to attach an intro video to the main vid. Intro should be placed in media/intro.mp4. It should have the same
+  # framerate, resolution, etc as camera video. By default there is a sample intro.
 pinata:
   enable: true #If you want to send your video to pinning service. You should have an account on pinata.cloud
   pinata_api: ""
