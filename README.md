@@ -31,6 +31,10 @@ rm go-ipfs_v0.6.0_linux-amd64.tar.gz go-ipfs_v0.6.0_linux-arm.tar.gz
 sudo ./go-ipfs/install.sh
 rm -rf go-ipfs
 ```
+Add it as a [service](https://github.com/ipfs/go-ipfs/issues/1430). Don't forget `Environment=IPFS_PATH=/home/pi/.ipfs`
+```bash
+ipfs init
+```
 - [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
 ```bash
 sudo apt-get -y install python3-rpi.gpio
@@ -42,6 +46,10 @@ pip3 install brother_ql
 sudo usermod -G lp -a $USER
 #reboot
 sudo reboot
+```
+- [Robonomics](https://github.com/airalab/robonomics/releases/tag/v0.24.0)
+```
+chmod +x robonomics
 ```
 
 ## Preparations
