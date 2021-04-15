@@ -23,9 +23,22 @@ def listener(channel, config, cam, dirname):
             return False
         cam.stop_record = False
         cam.is_busy = True
-        start_record_cam_thread = Thread(target=start_record_cam, args=(cam, dirname,))
+        start_record_cam_thread = Thread(
+            target=start_record_cam,
+            args=(
+                cam,
+                dirname,
+            ),
+        )
         start_record_cam_thread.start()
-        create_url_r_thread = Thread(target=create_url_r, args=(cam, dirname, config,))
+        create_url_r_thread = Thread(
+            target=create_url_r,
+            args=(
+                cam,
+                dirname,
+                config,
+            ),
+        )
         create_url_r_thread.start()
 
     else:
@@ -37,21 +50,33 @@ def listener(channel, config, cam, dirname):
             return False
         cam.stop_record = True
         cam.is_busy = False
-        stop_record_cam_thread = Thread(target=stop_record_cam, args=(cam.filename, cam.keyword, cam.qrpic, config, dirname,))
+        stop_record_cam_thread = Thread(
+            target=stop_record_cam,
+            args=(
+                cam.filename,
+                cam.keyword,
+                cam.qrpic,
+                config,
+                dirname,
+            ),
+        )
         stop_record_cam_thread.start()
+
 
 def start_record_cam(cam, dirname):
     cam.record(dirname)
     sys.exit()
+
 
 def stop_record_cam(filename, keyword, qrpic, config, dirname):
     time.sleep(1)
     send(filename, keyword, qrpic, config, dirname)
     sys.exit()
 
+
 def create_url_r(cam, dirname, config):
     cam.keyword, cam.link = create_url(config)
     logging.warning(cam.link)
     cam.qrpic = create_qr(dirname, cam.link, config)
-    if config['print_qr']['enable']:
+    if config["print_qr"]["enable"]:
         Task(cam.qrpic)
