@@ -54,4 +54,4 @@ def create_url_r(cam, dirname, config):
     logging.warning(cam.link)
     cam.qrpic = create_qr(dirname, cam.link, config)
     if config['print_qr']['enable']:
-        printer = Task(cam.qrpic)
+        Task(cam.qrpic)

@@ -7,8 +7,8 @@ def create_url(config):
 
     try:
         url = "https://" + config['yourls']['server'] + "/yourls-api.php"
-        querystring = {"username":config['yourls']['username'],"password":config['yourls']['password'],\
-        "action":"shorturl","format":"json","url":"http://gateway.ipfs.io"}
+        querystring = {"username":config['yourls']['username'],"password":config['yourls']['password'],
+                       "action":"shorturl","format":"json","url": "http://gateway.ipfs.io"}
         payload = ""
         response = requests.request("GET", url, data=payload, params=querystring)
 
@@ -17,24 +17,18 @@ def create_url(config):
         link = config['yourls']['server'] + "/"+keyword
         return keyword, link
     except Exception as e:
-        logging.warning('Failed to create URL, replaced by url.today/55')
+        logging.warning('Failed to create URL, replaced by url.today/55. Error: ', e)
         return '55', 'url.today/55'
 
 def update_url(keyword, hash, config):
 
     try:
         url = "https://" + config['yourls']['server'] + "/yourls-api.php"
-        querystring = {"username":config['yourls']['username'],"password":config['yourls']['password'],\
-        "action":"update","format":"json","url":"http://gateway.ipfs.io/ipfs/"+hash,"shorturl":keyword}
+        querystring = {"username":config['yourls']['username'],"password":config['yourls']['password'],
+                       "action":"update","format":"json","url":"http://gateway.ipfs.io/ipfs/"+hash,"shorturl":keyword}
         payload = ""
         response = requests.request("GET", url, data=payload, params=querystring)
 
         logging.debug(response)
     except Exception as e:
         logging.warning('Failed to update URL: ', e)
-
-
-if __name__ == '__main__':
-    keyword, link = create_url()
-    print(link)
-    update_url(keyword, 'QmS9vM9YkuXPcceDg6dSMvnKtd21p1j3pdkEJ5y5HAnkzy')

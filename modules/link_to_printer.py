@@ -6,19 +6,18 @@ from brother_ql.backends.helpers import send
 from PIL import Image
 
 
-class Task():
+class Task:
 
     def __init__(self, picname):
         logging.warning("Initializing printer")
 
         qr = Image.open(picname)
 
-        PRINTER = 'usb://0x04f9:0x209b'
-        LABEL_NAME = '62'
-        DPI_600 = False
+        printer = 'usb://0x04f9:0x209b'
+        label_name = '62'
 
         logging.warning("Printing...")
         qlr = BrotherQLRaster('QL-800')
-        conversion.convert(qlr, [qr], LABEL_NAME, red=True)
-        send(qlr.data, PRINTER)
+        conversion.convert(qlr, [qr], label_name, red=True)
+        send(qlr.data, printer)
         logging.warning("Printed!")

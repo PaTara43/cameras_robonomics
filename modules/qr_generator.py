@@ -34,6 +34,3 @@ def create_qr(dirname, link, config):
     img_qr_big.save(qrpic)
 
     return qrpic
-
-if __name__ == '__main__':
-    qrpic = create_qr('', '')
