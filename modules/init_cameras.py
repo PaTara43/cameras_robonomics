@@ -4,19 +4,22 @@ import subprocess
 
 
 class Camera:
-    def __init__(self, config):
+    def __init__(self, config: dict) -> None:
 
+        self.qrpic = None
+        self.keyword = None
         self.ip = config["camera"]["ip"]
         self.port = config["camera"]["port"]
         self.login = config["camera"]["login"]
         self.password = config["camera"]["password"]
         self.camera_address = config["camera"]["address"]
 
+        self.initial_launch = True
         self.is_busy = False
         self.stop_stream = False
         self.stop_record = False
 
-    def record(self, dirname):
+    def record(self, dirname: str) -> None:
 
         self.filename = (
             dirname + "/output/" + time.ctime(time.time()).replace(" ", "_") + ".mp4"

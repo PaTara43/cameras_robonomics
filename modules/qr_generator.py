@@ -4,7 +4,7 @@ import time
 from PIL import Image, ImageOps
 
 
-def create_qr(dirname, link, config):
+def create_qr(dirname: str, link: str, config: dict) -> str:
     inpic_s = 100
     robonomics = Image.open(dirname + "/media/robonomics.jpg").resize(
         (inpic_s, inpic_s)

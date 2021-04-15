@@ -1,13 +1,12 @@
 import logging
-import time
 
+from PIL import Image
 from brother_ql import BrotherQLRaster, conversion
 from brother_ql.backends.helpers import send
-from PIL import Image
 
 
 class Task:
-    def __init__(self, picname):
+    def __init__(self, picname: str) -> None:
         logging.warning("Initializing printer")
 
         qr = Image.open(picname)

@@ -1,18 +1,18 @@
-import glob
 import ipfshttpclient
-import json
 import logging
 import os
-import requests
 import subprocess
-import time
 
 
 from pinatapy import PinataPy
 from modules.url_generator import update_url
 
 
-def concatenate(dirname, filename):
+class Error(Exception):
+    pass
+
+
+def concatenate(dirname: str, filename: str) -> str:
     logging.warning("Concatenating videos")
     if not os.path.exists(dirname + "/media/intro.mp4"):
         raise Error("Intro file doesn't exist!")
@@ -23,7 +23,7 @@ def concatenate(dirname, filename):
     concat_filename = filename[:-4] + "_intro" + filename[-4:]
     concat_command = (
         "ffmpeg -f concat -safe 0 -i "
-        + _dirname
+        + dirname
         + "/output/vidlist.txt -c copy "
         + concat_filename
     )
@@ -39,7 +39,7 @@ def concatenate(dirname, filename):
     return concat_filename
 
 
-def _pin_to_pinata(filename, config):
+def _pin_to_pinata(filename: str, config: dict) -> None:
     pinata_api = config["pinata"]["pinata_api"]
     pinata_secret_api = config["pinata"]["pinata_secret_api"]
     if pinata_api and pinata_secret_api:
@@ -48,10 +48,11 @@ def _pin_to_pinata(filename, config):
         logging.warning("File sent")
 
 
-def send(filename, keyword, qrpic, config, dirname):
+def send(filename: str, keyword: str, qrpic: str, config: dict, dirname: str) -> None:
 
     if config["intro"]["enable"]:
         try:
+            non_concatenated_filename = filename
             filename = concatenate(dirname, filename)
         except Exception as e:
             logging.error("Failed to concatenate. Error: ", e)
@@ -59,12 +60,12 @@ def send(filename, keyword, qrpic, config, dirname):
     if config["ipfs"]["enable"]:
         try:
             client = ipfshttpclient.connect()
-            res = client.add(concat_filename)
+            res = client.add(filename)
             hash = res["Hash"]
             logging.warning("Published to IPFS, hash: " + hash)
             if config["pinata"]["enable"]:
                 logging.warning("Camera is sending file to pinata")
-                _pin_to_pinata(concat_filename, config)
+                _pin_to_pinata(filename, config)
             logging.warning("Updating URL")
             update_url(keyword, hash, config)
         except Exception as e:
@@ -78,7 +79,7 @@ def send(filename, keyword, qrpic, config, dirname):
             os.remove(filename)
             os.remove(qrpic)
             if config["intro"]["enable"]:
-                os.remove(concat_filename)
+                os.remove(non_concatenated_filename)
         except Exception as e:
             logging.error("Error while deleting file, error: ", e)
 

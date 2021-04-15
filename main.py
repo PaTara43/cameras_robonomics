@@ -1,16 +1,15 @@
 import asyncio
-import RPi.GPIO as GPIO
 import logging
 import os
-import time
+
+import RPi.GPIO as GPIO
 import yaml
 
 from modules.init_cameras import Camera
 from modules.listen_to_robonomics import listener
-from threading import Thread
 
 
-def read_configuration(dirname_f) -> dict:
+def read_configuration(dirname_f: str) -> dict:
 
     config_path = dirname_f + "/config/config.yaml"
     logging.debug(config_path)
@@ -36,8 +35,6 @@ if __name__ == "__main__":
     dirname = os.path.dirname(os.path.abspath(__file__))
     config = read_configuration(dirname)
     cam = Camera(config)
-    cam.initial_launch = True
-    cam.is_busy = False
     channel = 18
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(channel, GPIO.IN, pull_up_down=GPIO.PUD_UP)

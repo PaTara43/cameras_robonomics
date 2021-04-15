@@ -2,8 +2,10 @@ import ast
 import logging
 import requests
 
+from typing import Tuple, Any
 
-def create_url(config):
+
+def create_url(config: dict) -> Tuple[Any, Any]:
 
     try:
         url = "https://" + config["yourls"]["server"] + "/yourls-api.php"
@@ -26,7 +28,7 @@ def create_url(config):
         return "55", "url.today/55"
 
 
-def update_url(keyword, hash, config):
+def update_url(keyword: str, hash: str, config: dict) -> None:
 
     try:
         url = "https://" + config["yourls"]["server"] + "/yourls-api.php"
