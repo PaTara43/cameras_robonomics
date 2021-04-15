@@ -10,7 +10,13 @@ from modules.listen_to_robonomics import listener
 
 
 def read_configuration(dirname_f: str) -> dict:
+    """
 
+    :param dirname_f: path to the project ending with .../cameras_robonomics
+    :type dirname_f: str
+    :return: dictionary containing all the configurations
+    :rtype: dict
+    """
     config_path = dirname_f + "/config/config.yaml"
     logging.debug(config_path)
 

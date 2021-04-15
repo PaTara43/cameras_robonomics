@@ -7,6 +7,10 @@ from brother_ql.backends.helpers import send
 
 class Task:
     def __init__(self, picname: str) -> None:
+        """
+        :param picname: path to a picture to be printed
+        :type picname: str
+        """
         logging.warning("Initializing printer")
 
         qr = Image.open(picname)

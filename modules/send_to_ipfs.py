@@ -13,6 +13,14 @@ class Error(Exception):
 
 
 def concatenate(dirname: str, filename: str) -> str:
+    """
+    :param dirname: path to the project ending with .../cameras_robonomics
+    :type dirname: str
+    :param filename: full name of a recorded video
+    :type filename: str
+    :return: full name of a new video (concatenated with intro)
+    :rtype: str
+    """
     logging.warning("Concatenating videos")
     if not os.path.exists(dirname + "/media/intro.mp4"):
         raise Error("Intro file doesn't exist!")
@@ -40,6 +48,12 @@ def concatenate(dirname: str, filename: str) -> str:
 
 
 def _pin_to_pinata(filename: str, config: dict) -> None:
+    """
+    :param filename: full name of a recorded video
+    :type filename: str
+    :param config: dictionary containing all the configurations
+    :type config: dict
+    """
     pinata_api = config["pinata"]["pinata_api"]
     pinata_secret_api = config["pinata"]["pinata_secret_api"]
     if pinata_api and pinata_secret_api:
@@ -49,7 +63,18 @@ def _pin_to_pinata(filename: str, config: dict) -> None:
 
 
 def send(filename: str, keyword: str, qrpic: str, config: dict, dirname: str) -> None:
-
+    """
+    :param filename: full name of a recorded video
+    :type filename: str
+    :param keyword: shorturl keyword. More on yourls.org. E.g. url.today/6b. 6b is a keyword
+    :type keyword: str
+    :param qrpic: name of a qr-code file. Qr-code, which is redirecting to IPFS gateway
+    :type qrpic: str
+    :param config: dictionary containing all the configurations
+    :type config: dict
+    :param dirname: path to the project ending with .../cameras_robonomics
+    :type dirname: str
+    """
     if config["intro"]["enable"]:
         try:
             non_concatenated_filename = filename

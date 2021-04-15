@@ -5,6 +5,16 @@ from PIL import Image, ImageOps
 
 
 def create_qr(dirname: str, link: str, config: dict) -> str:
+    """
+    :param dirname: path to the project ending with .../cameras_robonomics
+    :type dirname: str
+    :param link: full yourls url. E.g. url.today/6b
+    :type link: str
+    :param config: dictionary containing all the configurations
+    :type config: dict
+    :return: full filename of a resulted qr-code
+    :rtype: str
+    """
     inpic_s = 100
     robonomics = Image.open(dirname + "/media/robonomics.jpg").resize(
         (inpic_s, inpic_s)

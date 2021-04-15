@@ -5,7 +5,10 @@ import subprocess
 
 class Camera:
     def __init__(self, config: dict) -> None:
-
+        """
+        :param config: dictionary containing all the configurations
+        :type config: dict
+        """
         self.qrpic = None
         self.keyword = None
         self.ip = config["camera"]["ip"]
@@ -20,7 +23,10 @@ class Camera:
         self.stop_record = False
 
     def record(self, dirname: str) -> None:
-
+        """
+        :param dirname: path to the project ending with .../cameras_robonomics
+        :type dirname: str
+        """
         self.filename = (
             dirname + "/output/" + time.ctime(time.time()).replace(" ", "_") + ".mp4"
         )

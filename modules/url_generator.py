@@ -6,7 +6,13 @@ from typing import Tuple, Any
 
 
 def create_url(config: dict) -> Tuple[Any, Any]:
-
+    """
+    :param config: dictionary containing all the configurations
+    :type config: dict
+    :return keyword: shorturl keyword. More on yourls.org. E.g. url.today/6b. 6b is a keyword
+    :param link: full yourls url. E.g. url.today/6b
+    :type link: str
+    """
     try:
         url = "https://" + config["yourls"]["server"] + "/yourls-api.php"
         querystring = {
@@ -29,7 +35,14 @@ def create_url(config: dict) -> Tuple[Any, Any]:
 
 
 def update_url(keyword: str, hash: str, config: dict) -> None:
-
+    """
+    :param keyword: shorturl keyword. More on yourls.org. E.g. url.today/6b. 6b is a keyword
+    :type keyword: str
+    :param hash: IPFS hash of a recorded video
+    :type hash: str
+    :param config: dictionary containing all the configurations
+    :type config: dict
+    """
     try:
         url = "https://" + config["yourls"]["server"] + "/yourls-api.php"
         querystring = {
